@@ -36,7 +36,7 @@ const SplashScreen = ({
   return (
     <View style={styles.container}>
       <Image
-        source={require('../image/aboutreact.png')}
+        source={require('../image/logo.png')}
         style={{width: '90%', resizeMode: 'contain', margin: 30}}
       />
       <ActivityIndicator
