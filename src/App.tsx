@@ -1,121 +1,133 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Chat Demo App
+ * https://github.com/olwimo/ChatApp
  *
  * @format
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+
 import {
+  Platform,
+  PlatformColor,
   SafeAreaView,
   ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
   useColorScheme,
-  View,
 } from 'react-native';
 
+import {NavigationContainer} from '@react-navigation/native';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import {Header} from 'react-native/Libraries/NewAppScreen';
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+// import {Provider} from 'react-redux';
+// import {store} from './state';
+
+import SplashScreen from './Screen/Splash';
+import LoginScreen from './Screen/Login';
+import RegisterScreen from './Screen/Register';
+import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
+
+export type RootStackParamList = {
+  SplashScreen: undefined;
+  Auth: undefined;
+  DrawerNavigationRoutes: undefined;
+  // DrawerNavigationRoutes: NavigatorScreenParams<undefined>;
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
+  // Stack Navigator for Login and Sign up Screen
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <NavigationContainer>
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{headerShown: false}}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-    </NavigationContainer>
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          title: 'Register', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const App = () => {
+  // const dispatch = useAppDispatch();
+  // const user = useAppSelector(selectUser);
+
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const backgroundStyle = Platform.select({
+    ios: {
+      backgroundColor: PlatformColor('systemBackground'),
+    },
+    android: {
+      backgroundColor: isDarkMode
+        ? PlatformColor('@android:color/background_dark')
+        : PlatformColor('@android:color/background_light'),
+    },
+    default: {
+      backgroundColor: isDarkMode ? 'black' : 'white',
+    },
+  });
+
+  return (
+    // <Provider store={store}>
+    <NavigationContainer>
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={backgroundStyle}>
+          <Header />
+          <Stack.Navigator initialRouteName="SplashScreen">
+            {/*SplashScreen while loading*/}
+            <Stack.Screen
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{headerShown: false}}
+            />
+            {/* Auth Navigator which includer Login Signup will come once */}
+            <Stack.Screen
+              name="Auth"
+              component={Auth}
+              options={{headerShown: false}}
+            />
+            {/* Navigation Drawer as a landing page */}
+            <Stack.Screen
+              name="DrawerNavigationRoutes"
+              component={DrawerNavigationRoutes}
+              // Hiding header for Navigation Drawer as we will use our custom header
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </ScrollView>
+      </SafeAreaView>
+    </NavigationContainer>
+    // </Provider>
+  );
+};
 
 export default App;
