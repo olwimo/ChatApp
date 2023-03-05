@@ -11,12 +11,12 @@ export const register = async (email: string, password: string) => {
   return auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userState => {
-      console.debug('Logout: Then');
+      console.debug('Register: Then');
       return userState;
     })
     .catch(error => {
-      console.debug('Logout: Error - ' + error.code);
-      throw error;
+      console.debug('Register: Error - ' + error.code);
+      throw 'Register: Error - ' + error.code;
     });
 };
 
@@ -36,7 +36,7 @@ export const login = async (email: string, password: string) => {
     })
     .catch(error => {
       console.debug('Login: Error - ' + error.code);
-      throw error;
+      throw 'Login: Error - ' + error.code;
     });
 };
 export const logout = () =>
@@ -47,5 +47,5 @@ export const logout = () =>
     })
     .catch(error => {
       console.debug('Sign-out error: ' + error.code);
-      throw error;
+      throw 'Sign-out error: ' + error.code;
     });

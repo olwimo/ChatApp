@@ -14,30 +14,35 @@ const SplashScreen = ({
   // const user = useAppSelector(selectUser);
 
   const [animating, setAnimating] = useState<boolean>(true);
-  const [ready, setReady] = useState<boolean>(false);
+  //const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
     // const unsubscribe =
     auth().onAuthStateChanged(userState => {
-      console.debug('SplashScreen.tsx: AuthStateChanged');
+      console.debug('SplashScreen.tsx: AuthStateChanged, animating is ' + animating);
 
-      if (ready && !animating)
+      // if (ready && !animating)
+      if (!animating)
         navigation.navigate(userState ? 'DrawerNavigationRoutes' : 'Auth');
     });
+    init();
+  }, [animating]);
+// useEffect(() => {
+//     init().finally(() => {
+//       console.debug('SplashScreen.tsx: init.finally, animating is ' + animating);
+//       setReady(true);
+//       if (!animating) navigation.navigate(
+//         auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
+//       );
+//     });
+//   }, []);
 
-    init().finally(() => {
-      console.debug('SplashScreen.tsx: init.finally');
-      setReady(true);
-      if (!animating) navigation.navigate(
-        auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-      );
-    });
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
+    useEffect(() => {
+      setTimeout(() => {
+      console.debug('SplashScreen.tsx: timeout, animating is ' + animating);
       setAnimating(false);
-      if (ready) navigation.navigate(
+      // if (ready)
+      navigation.navigate(
         auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
       );
     }, 5000);
