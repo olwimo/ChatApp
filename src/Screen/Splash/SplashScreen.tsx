@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
+import { init } from '../../auth';
 // import { useAppDispatch, useAppSelector } from "../state";
 // import { selectUser, setCurrentUser } from "../state/features/userSlice";
 
@@ -13,21 +14,30 @@ const SplashScreen = ({
   // const user = useAppSelector(selectUser);
 
   const [animating, setAnimating] = useState<boolean>(true);
+  const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
     // const unsubscribe =
     auth().onAuthStateChanged(userState => {
       console.debug('SplashScreen.tsx: AuthStateChanged');
 
-      if (!animating)
+      if (ready && !animating)
         navigation.navigate(userState ? 'DrawerNavigationRoutes' : 'Auth');
+    });
+
+    init().finally(() => {
+      console.debug('SplashScreen.tsx: init.finally');
+      setReady(true);
+      // if (!animating) navigation.navigate(
+      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
+      // );
     });
   }, []);
 
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      navigation.navigate(
+      if (ready) navigation.navigate(
         auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
       );
     }, 5000);

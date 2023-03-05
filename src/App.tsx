@@ -71,9 +71,6 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
 };
 
 const App = () => {
-  // const dispatch = useAppDispatch();
-  // const user = useAppSelector(selectUser);
-
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = Platform.select({

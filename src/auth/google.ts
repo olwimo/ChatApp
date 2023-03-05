@@ -37,7 +37,6 @@ export const initGoogle = async () => {
   GoogleSignin.configure(params);
 
   // Check if your device supports Google Play
-
   await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
 
   // Get the users ID token
