@@ -23,6 +23,7 @@ const credentialSignIn = ({idToken}: User) => {
 const errorHandler = (error: NativeModuleError) => {
   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
     // user cancelled the login flow
+    return undefined;
   } else if (error.code === statusCodes.IN_PROGRESS) {
     // operation (e.g. sign in) is in progress already
   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
@@ -46,6 +47,7 @@ export const initGoogle = async () => {
     .catch(error => {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         // user has not signed in yet
+        return undefined;
       }
       throw error;
     });

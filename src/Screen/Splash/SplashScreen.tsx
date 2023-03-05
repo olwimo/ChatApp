@@ -28,9 +28,9 @@ const SplashScreen = ({
     init().finally(() => {
       console.debug('SplashScreen.tsx: init.finally');
       setReady(true);
-      // if (!animating) navigation.navigate(
-      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-      // );
+      if (!animating) navigation.navigate(
+        auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
+      );
     });
   }, []);
 

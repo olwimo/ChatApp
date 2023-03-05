@@ -22,8 +22,6 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 
-import {Header} from 'react-native/Libraries/NewAppScreen';
-
 // import {Provider} from 'react-redux';
 // import {store} from './state';
 
@@ -73,19 +71,22 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = Platform.select({
-    ios: {
-      backgroundColor: PlatformColor('systemBackground'),
-    },
-    android: {
-      backgroundColor: isDarkMode
-        ? PlatformColor('@android:color/background_dark')
-        : PlatformColor('@android:color/background_light'),
-    },
-    default: {
-      backgroundColor: isDarkMode ? 'black' : 'white',
-    },
-  });
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? 'black' : 'white',
+  };
+  // Platform.select({
+  //   ios: {
+  //     backgroundColor: PlatformColor('systemBackground').toString(),
+  //   },
+  //   android: {
+  //     backgroundColor: isDarkMode
+  //       ? PlatformColor('@android:color/background_dark').toString()
+  //       : PlatformColor('@android:color/background_light').toString(),
+  //   },
+  //   default: {
+  //     backgroundColor: isDarkMode ? 'black' : 'white',
+  //   },
+  // });
 
   return (
     // <Provider store={store}>
@@ -98,7 +99,7 @@ const App = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={backgroundStyle}>
-          <Header />
+          {/* <Header /> */}
           <Stack.Navigator initialRouteName="SplashScreen">
             {/*SplashScreen while loading*/}
             <Stack.Screen
