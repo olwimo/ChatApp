@@ -17,6 +17,8 @@ import SplashScreen from './Screen/Splash';
 import LoginScreen from './Screen/Login';
 import RegisterScreen from './Screen/Register';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
+import { Provider } from 'react-redux';
+import { store } from './state';
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -59,7 +61,7 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
 const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
 
   return (
-    // <Provider store={store}>
+    <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="SplashScreen">
           {/*SplashScreen while loading*/}
@@ -83,7 +85,7 @@ const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
         />
         </Stack.Navigator>
       </NavigationContainer>
-    // </Provider>
+    </Provider>
   );
 };
 

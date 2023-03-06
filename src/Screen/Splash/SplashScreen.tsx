@@ -3,49 +3,47 @@ import auth from '@react-native-firebase/auth';
 import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
-import { init } from '../../auth';
-// import { useAppDispatch, useAppSelector } from "../state";
-// import { selectUser, setCurrentUser } from "../state/features/userSlice";
+import {init} from '../../auth';
+import {useAppDispatch} from '../../state';
+import {setAuthProvider} from '../../state/features/userSlice';
 
 const SplashScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'SplashScreen'>) => {
-  // const dispatch = useAppDispatch();
-  // const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
 
   const [animating, setAnimating] = useState<boolean>(true);
-  //const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
-    // const unsubscribe =
-    auth().onAuthStateChanged(userState => {
-      console.debug('SplashScreen.tsx: AuthStateChanged, animating is ' + animating);
+    if (animating) {
+      init()
+        .then(value => {
+          const [provider, msg] = value;
+          if (msg) console.debug(msg);
+          dispatch(setAuthProvider(provider));
+        })
+        .catch(() => dispatch(setAuthProvider('None')));
+    } else {
+      // const unsubscribe =
+      auth().onAuthStateChanged(userState => {
+        console.debug('SplashScreen.tsx: AuthStateChanged');
 
-      // if (ready && !animating)
-      if (!animating)
         navigation.navigate(userState ? 'DrawerNavigationRoutes' : 'Auth');
-    });
-    init();
+      });
+      // navigation.navigate(
+      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
+      // );
+    }
   }, [animating]);
-// useEffect(() => {
-//     init().finally(() => {
-//       console.debug('SplashScreen.tsx: init.finally, animating is ' + animating);
-//       setReady(true);
-//       if (!animating) navigation.navigate(
-//         auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-//       );
-//     });
-//   }, []);
 
-    useEffect(() => {
-      setTimeout(() => {
+  useEffect(() => {
+    setTimeout(() => {
       console.debug('SplashScreen.tsx: timeout, animating is ' + animating);
       setAnimating(false);
-      // if (ready)
-      navigation.navigate(
-        auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-      );
-    }, 5000);
+      // navigation.navigate(
+      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
+      // );
+    }, 2000);
   }, []);
 
   return (

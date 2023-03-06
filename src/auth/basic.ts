@@ -1,51 +1,62 @@
 import auth from '@react-native-firebase/auth';
 
-export const register = async (email: string, password: string) => {
+import {AuthProvider, withMsg} from '../state/types/user';
+
+export const autoBasic = async () =>
+  Promise.resolve<withMsg<AuthProvider>>(
+    auth().currentUser ? ['Basic'] : ['None', 'No Basic login'],
+  );
+
+export const registerBasic = async (email: string, password: string) => {
   if (!email) {
-    throw 'Please fill out Email';
+    return Promise.resolve<withMsg<AuthProvider>>([
+      'None',
+      'Please fill out Email',
+    ]);
   }
   if (!password) {
-    throw 'Please fill out Password';
+    return Promise.resolve<withMsg<AuthProvider>>([
+      'None',
+      'Please fill out Password',
+    ]);
   }
 
   return auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(userState => {
-      console.debug('Register: Then');
-      return userState;
-    })
-    .catch(error => {
-      console.debug('Register: Error - ' + error.code);
-      throw 'Register: Error - ' + error.code;
-    });
+    .then<withMsg<AuthProvider>>(() => ['Basic', 'Register: Then'])
+    .catch<withMsg<AuthProvider>>(error => [
+      'None',
+      'Register: Error - ' + JSON.stringify(error),
+    ]);
 };
 
-export const login = async (email: string, password: string) => {
+export const loginBasic = async (email: string, password: string) => {
   if (!email) {
-    throw 'Please fill out Email';
+    return Promise.resolve<withMsg<AuthProvider>>([
+      'None',
+      'Please fill out Email',
+    ]);
   }
   if (!password) {
-    throw 'Please fill out Password';
+    return Promise.resolve<withMsg<AuthProvider>>([
+      'None',
+      'Please fill out Password',
+    ]);
   }
 
   return auth()
     .signInWithEmailAndPassword(email, password)
-    .then(userState => {
-      console.debug('Login: Then');
-      return userState;
-    })
-    .catch(error => {
-      console.debug('Login: Error - ' + error.code);
-      throw 'Login: Error - ' + error.code;
-    });
+    .then<withMsg<AuthProvider>>(() => ['Basic', 'Login: Then'])
+    .catch<withMsg<AuthProvider>>(error => [
+      'None',
+      'Login: Error - ' + JSON.stringify(error),
+    ]);
 };
-export const logout = () =>
+export const logoutBasic = () =>
   auth()
     .signOut()
-    .then(() => {
-      console.debug('Signed out');
-    })
-    .catch(error => {
-      console.debug('Sign-out error: ' + error.code);
-      throw 'Sign-out error: ' + error.code;
-    });
+    .then<withMsg<AuthProvider>>(() => ['None', 'Signed out'])
+    .catch<withMsg<AuthProvider>>(error => [
+      'None',
+      'Sign-out error: ' + JSON.stringify(error),
+    ]);

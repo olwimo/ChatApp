@@ -14,11 +14,17 @@ import {
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
-import {login} from '../../auth';
+import {loginBasic, onGoogleButtonPress} from '../../auth';
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { useAppDispatch, useAppSelector } from '../../state';
+import { selectUser, setAuthProvider } from '../../state/features/userSlice';
 
 const LoginScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LoginScreen'>) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser)
+
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
@@ -28,9 +34,13 @@ const LoginScreen = ({
   const handleSubmitPress = () => {
     setErrortext('');
     setLoading(true);
-    login(userEmail, userPassword)
-      .catch(error => setErrortext(error))
-      .finally(() => setLoading(false));
+    loginBasic(userEmail, userPassword)
+    .then(value => {
+      const [provider, msg] = value;
+      if (msg) setErrortext(msg);
+      dispatch(setAuthProvider(provider));
+      setLoading(false);
+    });
   };
 
   return (
@@ -98,6 +108,21 @@ const LoginScreen = ({
               New Here ? Register
             </Text>
           </KeyboardAvoidingView>
+        </View>
+        <View>
+          <GoogleSigninButton style={{ width: 192, height: 48 }}
+  size={GoogleSigninButton.Size.Wide}
+  color={GoogleSigninButton.Color.Dark}
+  onPress={() => {
+    dispatch(setAuthProvider('Pending'));
+    onGoogleButtonPress().then(value => {
+      const [provider, msg] = value;
+      if (msg) setErrortext(msg);
+      dispatch(setAuthProvider(provider));
+    });
+  }}
+  disabled={user.authProvider !== 'None'}
+/>
         </View>
       </ScrollView>
     </View>

@@ -15,11 +15,15 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
-import {register} from '../../auth';
+import {registerBasic} from '../../auth';
+import { useAppDispatch } from '../../state';
+import { setAuthProvider } from '../../state/features/userSlice';
 
 const RegisterScreen = (
   _props: NativeStackScreenProps<RootStackParamList, 'RegisterScreen'>,
 ) => {
+  const dispatch = useAppDispatch();
+
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
@@ -30,9 +34,13 @@ const RegisterScreen = (
     console.debug('RegisterScreen.tsx: Pressed');
     setErrortext('');
     setLoading(true);
-    register(userEmail, userPassword)
-      .catch(error => setErrortext(error))
-      .finally(() => setLoading(false));
+    registerBasic(userEmail, userPassword)
+    .then(value => {
+      const [provider, msg] = value;
+      if (msg) setErrortext(msg);
+      dispatch(setAuthProvider(provider));
+      setLoading(false);
+    })
   };
 
   return (
