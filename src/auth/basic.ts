@@ -2,10 +2,10 @@ import auth from '@react-native-firebase/auth';
 
 import {AuthProvider, withMsg} from '../state/types/user';
 
-export const autoBasic = async () =>
-  Promise.resolve<withMsg<AuthProvider>>(
-    auth().currentUser ? ['Basic'] : ['None', 'No Basic login'],
-  );
+export const autoBasic: () => withMsg<AuthProvider> = () =>
+  auth().currentUser
+    ? ['Basic']
+    : ['None', 'No Basic login'];
 
 export const registerBasic = async (email: string, password: string) => {
   if (!email) {
@@ -55,8 +55,8 @@ export const loginBasic = async (email: string, password: string) => {
 export const logoutBasic = () =>
   auth()
     .signOut()
-    .then<withMsg<AuthProvider>>(() => ['None', 'Signed out'])
+    .then<withMsg<AuthProvider>>(() => ['None'])
     .catch<withMsg<AuthProvider>>(error => [
-      'None',
+      'Basic',
       'Sign-out error: ' + JSON.stringify(error),
     ]);

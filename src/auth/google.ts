@@ -14,14 +14,19 @@ const params: ConfigureParams = {
     '29469695820-ro9fdhinrlimp4spqe3nsc1gtufauvmu.apps.googleusercontent.com',
 };
 
-const credentialSignIn = ({idToken}: User) => {
+const credentialSignIn: ({
+  idToken,
+}: User) => Promise<withMsg<AuthProvider>> = async ({idToken}) => {
   // Create a Google credential with the token
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
   // Sign-in the user with the credential
-  return auth()
-    .signInWithCredential(googleCredential)
-    .then<withMsg<AuthProvider>>(() => ['Google']);
+  try {
+    await auth().signInWithCredential(googleCredential);
+  } catch (reason) {
+    return ['None', 'Credential error: ' + JSON.stringify(reason)];
+  }
+  return ['Google'];
 };
 
 const errorHandler: (
@@ -41,38 +46,37 @@ const errorHandler: (
 
 export const initGoogle = async () => {
   GoogleSignin.configure(params);
-
-  // Check if your device supports Google Play
-  return GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
 };
 
-export const autoGoogle = async () =>
-  GoogleSignin.getCurrentUser().then<withMsg<AuthProvider>>(user =>
-    user !== null
-      ? credentialSignIn(user)
-      : // Get the users ID token
-        GoogleSignin.signInSilently()
-          .then(credentialSignIn)
-          .catch(error => {
-            if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-              // user has not signed in yet
-            }
-            throw error;
-          })
-          .catch(errorHandler),
-  );
+// export const autoGoogle = async () => {
+//   const user = GoogleSignin.getCurrentUser();
+// if(user) return credentialSignIn(user);
+//       : // Get the users ID token
+//         GoogleSignin.signInSilently()
+//           .then<withMsg<AuthProvider>>(credentialSignIn)
+//           // .catch(error => {
+//           //   if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+//           //     // user has not signed in yet
+//           //   }
+//           //   throw error;
+//           // })
+//           .catch<withMsg<AuthProvider>>(errorHandler),
+//   )};
 
-export const onGoogleButtonPress = async () => {
-  // Check if your device supports Google Play
-  // await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+export const onGoogleButtonPress: () => Promise<withMsg<AuthProvider>> = async () => {
+  try {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+  } catch (error) {
+    return ['None', "Doesn't have Google Play Services"];
+  }
 
   // Get the users ID token
   return GoogleSignin.signIn().then(credentialSignIn).catch(errorHandler);
 };
 
-export const logoutGoogle = async () => {
-  GoogleSignin.signOut()
-    .then<withMsg<AuthProvider>>(() => ['None', 'Google signout'])
-    .catch<withMsg<AuthProvider>>(err => ['None', JSON.stringify(err)])
-    .finally(logoutBasic);
+export const logoutGoogle: () => Promise<withMsg<AuthProvider>> = async () => {
+  await GoogleSignin.signOut();
+  const [provider, msg] = await logoutBasic();
+  return [provider !== 'Basic' ? provider : 'Google', msg];
 };

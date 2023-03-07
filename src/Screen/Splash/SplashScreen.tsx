@@ -16,13 +16,9 @@ const SplashScreen = ({
 
   useEffect(() => {
     if (animating) {
-      init()
-        .then(value => {
-          const [provider, msg] = value;
-          if (msg) console.debug(msg);
-          dispatch(setAuthProvider(provider));
-        })
-        .catch(() => dispatch(setAuthProvider('None')));
+      const [provider, msg] = init();
+      if (msg) console.debug(msg);
+      dispatch(setAuthProvider(provider));
     } else {
       // const unsubscribe =
       auth().onAuthStateChanged(userState => {

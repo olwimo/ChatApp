@@ -8,8 +8,13 @@ import {
 } from '@react-navigation/drawer';
 
 import {logout} from '../auth';
+import { useAppDispatch, useAppSelector } from '../state';
+import { selectUser, setAuthProvider } from '../state/features/userSlice';
 
 const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
@@ -25,7 +30,7 @@ const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <DrawerItem
-          label={({color}) => <Text style={{color: '#d8d8d8'}}>Logout</Text>}
+          label={() => <Text style={{color: '#d8d8d8'}}>Logout</Text>}
           onPress={() => {
             props.navigation.toggleDrawer();
             Alert.alert(
@@ -40,7 +45,12 @@ const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
                 },
                 {
                   text: 'Confirm',
-                  onPress: logout,
+                  onPress: async () => {
+                    const current = user.authProvider;
+                    dispatch(setAuthProvider('Pending'));
+                    const [provider, msg] = await logout(current);
+                    if (provider !== 'Pending') dispatch(setAuthProvider(provider));
+                  },
                 },
               ],
               {cancelable: false},

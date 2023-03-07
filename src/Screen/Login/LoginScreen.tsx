@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
+  Button,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -14,16 +15,29 @@ import {
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
-import {loginBasic, onGoogleButtonPress} from '../../auth';
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import { useAppDispatch, useAppSelector } from '../../state';
-import { selectUser, setAuthProvider } from '../../state/features/userSlice';
+import {loginBasic, onGoogleButtonPress, onFBLoginFinished} from '../../auth';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
+import {useAppDispatch, useAppSelector} from '../../state';
+import {selectUser, setAuthProvider} from '../../state/features/userSlice';
+import {LoginButton} from 'react-native-fbsdk-next';
+import {AuthProvider, withMsg} from '../../state/types/user';
 
 const LoginScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LoginScreen'>) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser)
+  const user = useAppSelector(selectUser);
+
+  const loginDecorator: (
+    login: (...args: any[]) => Promise<withMsg<AuthProvider>>,
+  ) => (...args: any[]) => void =
+    login =>
+    async (...args: any[]) => {
+      dispatch(setAuthProvider('Pending'));
+      const [provider, msg] = await login.apply(args);
+      if (msg) setErrortext(msg);
+      dispatch(setAuthProvider(provider));
+    };
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -34,8 +48,7 @@ const LoginScreen = ({
   const handleSubmitPress = () => {
     setErrortext('');
     setLoading(true);
-    loginBasic(userEmail, userPassword)
-    .then(value => {
+    loginBasic(userEmail, userPassword).then(value => {
       const [provider, msg] = value;
       if (msg) setErrortext(msg);
       dispatch(setAuthProvider(provider));
@@ -110,19 +123,43 @@ const LoginScreen = ({
           </KeyboardAvoidingView>
         </View>
         <View>
-          <GoogleSigninButton style={{ width: 192, height: 48 }}
-  size={GoogleSigninButton.Size.Wide}
-  color={GoogleSigninButton.Color.Dark}
-  onPress={() => {
-    dispatch(setAuthProvider('Pending'));
+          <GoogleSigninButton
+            style={{width: 192, height: 48}}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={loginDecorator(onGoogleButtonPress)
+              /*
+dispatch(setAuthProvider('Pending'));
     onGoogleButtonPress().then(value => {
       const [provider, msg] = value;
       if (msg) setErrortext(msg);
       dispatch(setAuthProvider(provider));
     });
-  }}
-  disabled={user.authProvider !== 'None'}
-/>
+  }
+ */
+            }
+            disabled={user.authProvider !== 'None'}
+          />
+        </View>
+        <View>
+          {user.authProvider === 'None' ? (
+            <LoginButton
+              permissions={['public_profile', 'email']}
+              onLoginFinished={
+                loginDecorator(onFBLoginFinished)
+                //   (error, result) => {
+                //   dispatch(setAuthProvider('Pending'));
+                //   onFBLoginFinished(error, result).then(value => {
+                //     const [provider, msg] = value;
+                //     if (msg) setErrortext(msg);
+                //     dispatch(setAuthProvider(provider));
+                //   });
+                // }
+              }
+            />
+          ) : (
+            <Button title="Login in progress..." disabled />
+          )}
         </View>
       </ScrollView>
     </View>
