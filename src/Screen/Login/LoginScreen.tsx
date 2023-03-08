@@ -21,12 +21,20 @@ import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setAuthProvider} from '../../state/features/userSlice';
 import {LoginButton} from 'react-native-fbsdk-next';
 import {AuthProvider, withMsg} from '../../state/types/user';
+import { useFocusEffect } from '@react-navigation/native';
 
 const LoginScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LoginScreen'>) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user.authProvider !== 'None') navigation.navigate('DrawerNavigationRoutes');
+      return () => undefined;
+    }, [user.authProvider])
+  );
 
   const loginDecorator: (
     login: (...args: any[]) => Promise<withMsg<AuthProvider>>,

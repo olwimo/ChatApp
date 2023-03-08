@@ -20,10 +20,10 @@ const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
           <Text style={{fontSize: 25, color: '#307ecc'}}>
-            {'About React'.charAt(0)}
+            {'ChatApp'.charAt(0)}
           </Text>
         </View>
-        <Text style={stylesSidebar.profileHeaderText}>AboutReact</Text>
+        <Text style={stylesSidebar.profileHeaderText}>ChatApp</Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />
 
