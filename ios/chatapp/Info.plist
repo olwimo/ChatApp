@@ -39,6 +39,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload photos to chat</string>
 	<key>FacebookAppID</key>
 	<string>779999040151564</string>
 	<key>FacebookClientToken</key>
