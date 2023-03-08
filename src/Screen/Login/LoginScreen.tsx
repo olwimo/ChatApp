@@ -21,7 +21,7 @@ import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setAuthProvider} from '../../state/features/userSlice';
 import {LoginButton} from 'react-native-fbsdk-next';
 import {AuthProvider, withMsg} from '../../state/types/user';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const LoginScreen = ({
   navigation,
@@ -31,10 +31,11 @@ const LoginScreen = ({
 
   useFocusEffect(
     React.useCallback(() => {
-      if (['None', 'Pending'].indexOf(user.authProvider) === -1) navigation.navigate('DrawerNavigationRoutes');
+      if (['None', 'Pending'].indexOf(user.authProvider) === -1)
+        navigation.navigate('DrawerNavigationRoutes');
       console.debug('Forced to leave login screen');
       return () => undefined;
-    }, [user.authProvider])
+    }, [user.authProvider]),
   );
 
   const loginDecorator: (
@@ -136,7 +137,8 @@ const LoginScreen = ({
             style={{width: 192, height: 48}}
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
-            onPress={loginDecorator(onGoogleButtonPress)
+            onPress={
+              loginDecorator(onGoogleButtonPress)
               /*
 dispatch(setAuthProvider('Pending'));
     onGoogleButtonPress().then(value => {
