@@ -1744,10 +1744,25 @@
     "@expo/config-plugins" "^5.0.4"
     plist "^3.0.5"
 
+"@react-native-firebase/firestore@^17.3.2":
+  version "17.3.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-17.3.2.tgz#1b15d65bd0cb042f48cbbb4b85eeff0c0dcb5796"
+  integrity sha512-ZqdtYcZExAdfFXIntfy5/hTRK8jAyZnQCbpCyvC3O8f1m4C2pDo57xLzTdukORtJjiBGkxBpcULLBrSbOJ/SXw==
+
+"@react-native-firebase/functions@^17.3.2":
+  version "17.3.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/functions/-/functions-17.3.2.tgz#8353ac5473d9df3b55fa19131b215dda88e74df2"
+  integrity sha512-J/koy5YuPItDHtyKYtMBBqj2aAlh6T17aH+OmK0ums9jW9WM2di8N2nqjwNnGXnjtWfMqqUQWYdvhmYGbKPMvg==
+
 "@react-native-firebase/messaging@^17.3.2":
   version "17.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-17.3.2.tgz#1d37fdf8cc3027542fdbab871f5df3ea2fb687c8"
   integrity sha512-7IO12OjNdjtvtxHXY/8qJ9a0RLTg4cUddnE1sNxj3RciDz+Sx7SRJX0fsyX19i1m7dcPh73p9NzrrtnvNnILfw==
+
+"@react-native-firebase/storage@^17.3.2":
+  version "17.3.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-17.3.2.tgz#f5d75c9ce2fc05da437fecb0900de4314c5cf9a1"
+  integrity sha512-Pojwd5SuM8lvJBDfVV9ylyTOb8bwildhdAetLgyIdvyVwE9QqzpZoOebb283ceJ0h6OdznHiR66JJStcyclUwg==
 
 "@react-native-google-signin/google-signin@^9.0.2":
   version "9.0.2"

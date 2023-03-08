@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.29469695820-8cm64ol5oiu0e0lbli4j8h5gtaig4imh</string>
+				<string>com.googleusercontent.apps.29469695820-02jbvk365910tduu41rbu40fvsj4ddai</string>
 			</array>
 		</dict>
 		<dict>
@@ -39,6 +39,17 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>779999040151564</string>
+	<key>FacebookClientToken</key>
+	<string>804ab24fe8b2c0155d12a6841ef2ad48</string>
+	<key>FacebookDisplayName</key>
+	<string>chatapp</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -54,6 +65,11 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -68,16 +84,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FacebookAppID</key>
-	<string>779999040151564</string>
-	<key>FacebookClientToken</key>
-	<string>804ab24fe8b2c0155d12a6841ef2ad48</string>
-	<key>FacebookDisplayName</key>
-	<string>chatapp</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-	</array>
 </dict>
 </plist>
