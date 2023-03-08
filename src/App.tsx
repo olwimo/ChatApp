@@ -8,23 +8,22 @@
 import React, {PropsWithChildren} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
-
-// import {Provider} from 'react-redux';
-// import {store} from './redux/store';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import SplashScreen from './Screen/Splash';
 import LoginScreen from './Screen/Login';
 import RegisterScreen from './Screen/Register';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
-import { Provider } from 'react-redux';
-import { store } from './state';
+import {Provider} from 'react-redux';
+import {store} from './state';
 
 export type RootStackParamList = {
   SplashScreen: undefined;
   Auth: undefined;
   DrawerNavigationRoutes: undefined;
-  // DrawerNavigationRoutes: NavigatorScreenParams<undefined>;
   LoginScreen: undefined;
   RegisterScreen: undefined;
 };
@@ -59,7 +58,6 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
 };
 
 const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
-
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -70,19 +68,19 @@ const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
             component={SplashScreen}
             options={{headerShown: false}}
           />
-        {/* Auth Navigator which includer Login Signup will come once */}
-        <Stack.Screen
-          name="Auth"
-          component={Auth}
-          options={{headerShown: false}}
-        />
-        {/* Navigation Drawer as a landing page */}
-        <Stack.Screen
-          name="DrawerNavigationRoutes"
-          component={DrawerNavigationRoutes}
-          // Hiding header for Navigation Drawer as we will use our custom header
-          options={{headerShown: false}}
-        />
+          {/* Auth Navigator which includer Login Signup will come once */}
+          <Stack.Screen
+            name="Auth"
+            component={Auth}
+            options={{headerShown: false}}
+          />
+          {/* Navigation Drawer as a landing page */}
+          <Stack.Screen
+            name="DrawerNavigationRoutes"
+            component={DrawerNavigationRoutes}
+            // Hiding header for Navigation Drawer as we will use our custom header
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
