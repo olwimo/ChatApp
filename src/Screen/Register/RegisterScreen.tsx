@@ -28,7 +28,7 @@ const RegisterScreen = (
 
   useFocusEffect(
     React.useCallback(() => {
-      if (user.authProvider !== 'None') navigation.navigate('DrawerNavigationRoutes');
+      if (['None', 'Pending'].indexOf(user.authProvider) === -1) navigation.navigate('DrawerNavigationRoutes');
       console.debug('Forced to leave register screen');
       return () => undefined;
     }, [user.authProvider])

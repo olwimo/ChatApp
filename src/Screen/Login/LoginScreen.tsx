@@ -31,7 +31,7 @@ const LoginScreen = ({
 
   useFocusEffect(
     React.useCallback(() => {
-      if (user.authProvider !== 'None') navigation.navigate('DrawerNavigationRoutes');
+      if (['None', 'Pending'].indexOf(user.authProvider) === -1) navigation.navigate('DrawerNavigationRoutes');
       console.debug('Forced to leave login screen');
       return () => undefined;
     }, [user.authProvider])
