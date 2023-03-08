@@ -25,7 +25,7 @@ export const onFBLoginFinished = async (
       'None',
       'login has error: ' + JSON.stringify(error),
     ]);
-  } else if (result.isCancelled) {
+  } else if (!result || result.isCancelled) {
     console.log('login is cancelled.');
     return Promise.resolve<withMsg<AuthProvider>>([
       'None',
