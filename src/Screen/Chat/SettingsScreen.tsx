@@ -8,33 +8,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import {StackParamList} from './Chat';
-import {useAppSelector} from '../../state';
-import {selectUser} from '../../state/features/userSlice';
+import {useAppDispatch, useAppSelector} from '../../state';
+import {selectUser, setName} from '../../state/features/userSlice';
 
 const SettingsScreen = (
   _props: NativeStackScreenProps<StackParamList, 'SettingsScreen'>,
 ) => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const [name, setName] = useState<string>('');
+
+  const [newName, setNewName] = useState<string>('');
 
   useEffect(() => {
     console.debug('userId changed: ' + user.userId);
-    // const handler = (
-    //   documentSnapshot: FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData>,
-    // ) => {
-    //   if (!documentSnapshot.exists) {
-    //     firestore().collection('users').add({
-    //       name: 'New user',
-    //     });
-    //   } else {
-    //     documentSnapshot.
-    //     setName(documentSnapshot.data()?.name);
-    //   }
-    // };
+
     if (user.userId) {
       const userRef = firestore().collection('users').doc(user.userId);
 
@@ -47,7 +36,9 @@ const SettingsScreen = (
         }
       });
       const subscriber = userRef.onSnapshot(doc => {
-        setName(doc.data()?.name);
+        const name = doc.data()?.name;
+        dispatch(setName(name));
+        setNewName(name);
       });
 
       return () => subscriber();
@@ -78,7 +69,7 @@ const SettingsScreen = (
             <Text>Name: </Text>
             <TextInput
               style={styles.inputStyle}
-              onChangeText={name => setName(name)}
+              onChangeText={name => setNewName(name)}
               placeholder="Enter name" //dummy@abc.com
               placeholderTextColor="#8b9cb5"
               autoCapitalize="none"
@@ -86,17 +77,21 @@ const SettingsScreen = (
               returnKeyType="next"
               underlineColorAndroid="#f000"
               blurOnSubmit={false}>
-              {name}
+              {user.name}
             </TextInput>
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={() => {
-                firestore().collection('users').doc(user.userId).set({
-                  name: name,
-                }).then(() => {
-                  console.debug('Name changed to ' + name);
-                });
+                firestore()
+                  .collection('users')
+                  .doc(user.userId)
+                  .set({
+                    name: newName,
+                  })
+                  .then(() => {
+                    console.debug('Name changed to ' + newName);
+                  });
               }}>
               <Text style={styles.buttonTextStyle}>Apply</Text>
             </TouchableOpacity>
