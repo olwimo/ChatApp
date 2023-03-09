@@ -16,7 +16,7 @@ import {
 import SplashScreen from './Screen/Splash';
 import LoginScreen from './Screen/Login';
 import RegisterScreen from './Screen/Register';
-import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
+import Chat from './Screen/Chat';
 import {Provider} from 'react-redux';
 import {store} from './state';
 
@@ -28,7 +28,7 @@ export type AuthStackParamList = {
 export type RootStackParamList = {
   SplashScreen: undefined;
   Auth: NavigatorScreenParams<AuthStackParamList>;
-  DrawerNavigationRoutes: undefined;
+  Chat: undefined;
 };
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -80,8 +80,8 @@ const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
           />
           {/* Navigation Drawer as a landing page */}
           <Stack.Screen
-            name="DrawerNavigationRoutes"
-            component={DrawerNavigationRoutes}
+            name="Chat"
+            component={Chat}
             // Hiding header for Navigation Drawer as we will use our custom header
             options={{headerShown: false}}
           />

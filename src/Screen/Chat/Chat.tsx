@@ -19,17 +19,17 @@ export type StackParamList = {
   SettingsScreen: undefined;
 };
 
-export type DrawerStackParamList = {
+export type ChatStackParamList = {
   HomeScreenStack: undefined;
   SettingScreenStack: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
-const Drawer = createDrawerNavigator<DrawerStackParamList>();
+const Drawer = createDrawerNavigator<ChatStackParamList>();
 
 const HomeScreenStack = ({
   navigation,
-}: DrawerScreenProps<DrawerStackParamList, 'HomeScreenStack'>) => {
+}: DrawerScreenProps<ChatStackParamList, 'HomeScreenStack'>) => {
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
@@ -55,7 +55,7 @@ const HomeScreenStack = ({
 
 const SettingScreenStack = ({
   navigation,
-}: DrawerScreenProps<DrawerStackParamList, 'SettingScreenStack'>) => {
+}: DrawerScreenProps<ChatStackParamList, 'SettingScreenStack'>) => {
   return (
     <Stack.Navigator
       initialRouteName="SettingsScreen"
@@ -82,8 +82,8 @@ const SettingScreenStack = ({
   );
 };
 
-const DrawerNavigatorRoutes = (
-  _props: NativeStackScreenProps<RootStackParamList, 'DrawerNavigationRoutes'>,
+const Chat = (
+  _props: NativeStackScreenProps<RootStackParamList, 'Chat'>,
 ) => {
   return (
     <Drawer.Navigator
@@ -111,4 +111,4 @@ const DrawerNavigatorRoutes = (
   );
 };
 
-export default DrawerNavigatorRoutes;
+export default Chat;

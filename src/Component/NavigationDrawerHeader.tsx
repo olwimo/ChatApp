@@ -1,10 +1,10 @@
 import React from 'react';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Image, TouchableOpacity, View} from 'react-native';
-import {DrawerStackParamList} from '../Screen/DrawerNavigationRoutes';
+import {ChatStackParamList} from '../Screen/Chat';
 
 const NavigationDrawerHeader = (props: {
-  navigationProps: DrawerNavigationProp<DrawerStackParamList>;
+  navigationProps: DrawerNavigationProp<ChatStackParamList>;
 }) => {
   const toggleDrawer = () => {
     props.navigationProps.toggleDrawer();

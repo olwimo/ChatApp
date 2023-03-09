@@ -5,7 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {init} from '../../auth';
 import {useAppDispatch} from '../../state';
-import {setAuthProvider} from '../../state/features/userSlice';
+import {setAuthProvider, setUserId} from '../../state/features/userSlice';
 
 const SplashScreen = ({
   navigation,
@@ -22,14 +22,12 @@ const SplashScreen = ({
     } else {
       // const unsubscribe =
       auth().onAuthStateChanged(userState => {
-        console.debug('SplashScreen.tsx: AuthStateChanged');
+        console.debug('SplashScreen.tsx: AuthStateChanged: ' + userState?.uid);
+        dispatch(setUserId(userState?.uid));
 
-        if (userState) navigation.navigate('DrawerNavigationRoutes');
+        if (userState) navigation.navigate('Chat');
         else navigation.navigate('Auth', {screen: 'LoginScreen'});
       });
-      // navigation.navigate(
-      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-      // );
     }
   }, [animating]);
 
@@ -37,9 +35,6 @@ const SplashScreen = ({
     setTimeout(() => {
       console.debug('SplashScreen.tsx: timeout, animating is ' + animating);
       setAnimating(false);
-      // navigation.navigate(
-      //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',
-      // );
     }, 2000);
   }, []);
 

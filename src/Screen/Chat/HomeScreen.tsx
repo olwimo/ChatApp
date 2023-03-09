@@ -1,7 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
-import {StackParamList} from './DrawerNavigationRoutes';
+import {StackParamList} from './Chat';
 
 const HomeScreen = (
   _props: NativeStackScreenProps<StackParamList, 'HomeScreen'>,
