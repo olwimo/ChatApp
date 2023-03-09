@@ -7,7 +7,7 @@
 
 import React, {PropsWithChildren} from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, NavigatorScreenParams} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -20,26 +20,30 @@ import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
 import {Provider} from 'react-redux';
 import {store} from './state';
 
-export type RootStackParamList = {
-  SplashScreen: undefined;
-  Auth: undefined;
-  DrawerNavigationRoutes: undefined;
+export type AuthStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
+}
+
+export type RootStackParamList = {
+  SplashScreen: undefined;
+  Auth: NavigatorScreenParams<AuthStackParamList>;
+  DrawerNavigationRoutes: undefined;
 };
 
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
   // Stack Navigator for Login and Sign up Screen
   return (
-    <Stack.Navigator initialRouteName="LoginScreen">
-      <Stack.Screen
+    <AuthStack.Navigator initialRouteName="LoginScreen">
+      <AuthStack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      <AuthStack.Screen
         name="RegisterScreen"
         component={RegisterScreen}
         options={{
@@ -53,7 +57,7 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
           },
         }}
       />
-    </Stack.Navigator>
+    </AuthStack.Navigator>
   );
 };
 

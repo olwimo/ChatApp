@@ -24,7 +24,8 @@ const SplashScreen = ({
       auth().onAuthStateChanged(userState => {
         console.debug('SplashScreen.tsx: AuthStateChanged');
 
-        navigation.navigate(userState ? 'DrawerNavigationRoutes' : 'Auth');
+        if (userState) navigation.navigate('DrawerNavigationRoutes');
+        else navigation.navigate('Auth', {screen: 'LoginScreen'});
       });
       // navigation.navigate(
       //   auth().currentUser ? 'DrawerNavigationRoutes' : 'Auth',

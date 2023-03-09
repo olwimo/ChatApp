@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 
-import {RootStackParamList} from '../../App';
+import {AuthStackParamList, RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
 import {loginBasic, onGoogleButtonPress, onFBLoginFinished} from '../../auth';
 import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
@@ -21,19 +21,25 @@ import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setAuthProvider} from '../../state/features/userSlice';
 import {LoginButton} from 'react-native-fbsdk-next';
 import {AuthProvider, withMsg} from '../../state/types/user';
-import {useFocusEffect} from '@react-navigation/native';
+import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 
 const LoginScreen = ({
   navigation,
-}: NativeStackScreenProps<RootStackParamList, 'LoginScreen'>) => {
+}: CompositeScreenProps<
+  NativeStackScreenProps<AuthStackParamList, 'LoginScreen'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   useFocusEffect(
     React.useCallback(() => {
-      if (['None', 'Pending'].indexOf(user.authProvider) === -1)
+      if (['None', 'Pending'].indexOf(user.authProvider) === -1) {
         navigation.navigate('DrawerNavigationRoutes');
-      console.debug('Forced to leave login screen');
+        console.debug('Forced to leave login screen');
+      }
+      setErrortext('');
+
       return () => undefined;
     }, [user.authProvider]),
   );
