@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>29469695820-8cm64ol5oiu0e0lbli4j8h5gtaig4imh.apps.googleusercontent.com</string>
+	<string>29469695820-02jbvk365910tduu41rbu40fvsj4ddai.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.29469695820-8cm64ol5oiu0e0lbli4j8h5gtaig4imh</string>
+	<string>com.googleusercontent.apps.29469695820-02jbvk365910tduu41rbu40fvsj4ddai</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>29469695820-bmd09vmai2pom5epbd6vuef2inkg66us.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.chatapp</string>
+	<string>io.github.olwimo.chatapp</string>
 	<key>PROJECT_ID</key>
 	<string>chatapp-5d397</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:29469695820:ios:51f63837913644bc7279e9</string>
+	<string>1:29469695820:ios:d6ca6e3e912b40c37279e9</string>
 </dict>
 </plist>

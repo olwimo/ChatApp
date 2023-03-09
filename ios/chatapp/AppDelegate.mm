@@ -3,9 +3,6 @@
 
 #import <React/RCTBundleURLProvider.h>
 
-// #import <UIKit.h>
-// #import <FacebookCore.h>
-
 #import <RNGoogleSignin/RNGoogleSignin.h>
 #import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 

@@ -13,24 +13,30 @@ import {
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import {RootStackParamList} from '../../App';
+import {AuthStackParamList, RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
 import {registerBasic} from '../../auth';
 import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setAuthProvider} from '../../state/features/userSlice';
-import {useFocusEffect} from '@react-navigation/native';
+import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 
 const RegisterScreen = ({
   navigation,
-}: NativeStackScreenProps<RootStackParamList, 'RegisterScreen'>) => {
+}: CompositeScreenProps<
+  NativeStackScreenProps<AuthStackParamList, 'RegisterScreen'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   useFocusEffect(
     React.useCallback(() => {
-      if (['None', 'Pending'].indexOf(user.authProvider) === -1)
+      if (['None', 'Pending'].indexOf(user.authProvider) === -1) {
         navigation.navigate('DrawerNavigationRoutes');
-      console.debug('Forced to leave register screen');
+        console.debug('Forced to leave register screen');
+      }
+      setErrortext('');
+
       return () => undefined;
     }, [user.authProvider]),
   );
