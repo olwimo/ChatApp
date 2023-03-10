@@ -7,7 +7,7 @@ import {logoutBasic} from './basic';
 export const initFacebook = () => {
   // Setting the facebook app id using setAppID
   // Remember to set CFBundleURLSchemes in Info.plist on iOS if needed
-  Settings.setAppID('779999040151564');
+  Settings.setAppID('1207055786592486');
 
   Settings.setAdvertiserTrackingEnabled(false);
   // Ask for consent first if necessary
