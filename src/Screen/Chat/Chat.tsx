@@ -18,12 +18,12 @@ import {selectUser} from '../../state/features/userSlice';
 import RoomScreen from './RoomScreen';
 
 export type StackParamList = {
-  RoomScreen: {roomId: string};
+  RoomScreen: undefined;
   SettingsScreen: undefined;
 };
 
 export type ChatStackParamList = {
-  RoomScreenStack: {roomId: string};
+  RoomScreenStack: undefined;
   SettingScreenStack: undefined;
 };
 
@@ -31,18 +31,15 @@ const Stack = createNativeStackNavigator<StackParamList>();
 const Drawer = createDrawerNavigator<ChatStackParamList>();
 
 const RoomScreenStack = ({
-  route,
   navigation,
 }: DrawerScreenProps<ChatStackParamList, 'RoomScreenStack'>) => {
-  const room = route.params.roomId;
   return (
     <Stack.Navigator initialRouteName="RoomScreen">
       <Stack.Screen
         name="RoomScreen"
         component={RoomScreen}
-        initialParams={{roomId: room}}
         options={{
-          title: room, //Set Header Title
+          title: 'Chat', //Set Header Title
           headerLeft: () => (
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
@@ -90,27 +87,6 @@ const SettingScreenStack = ({
 
 const Chat = (_props: NativeStackScreenProps<RootStackParamList, 'Chat'>) => {
   const user = useAppSelector(selectUser);
-  const [rooms, setRooms] = useState<string[]>([]);
-
-  useEffect(() => {
-    console.debug('userId changed: ' + user.userId);
-
-    if (user.userId) {
-      const subscriber = firestore()
-        .collection('chat')
-        .onSnapshot(colSnapshot => {
-          if (colSnapshot.empty) {
-            return;
-          }
-          setRooms(colSnapshot.docs.map(docSnapshot => docSnapshot.id));
-        });
-
-      return () => subscriber();
-    }
-
-    return () => undefined;
-  }, [user.userId]);
-
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -131,15 +107,11 @@ const Chat = (_props: NativeStackScreenProps<RootStackParamList, 'Chat'>) => {
         options={{drawerLabel: 'Settings'}}
         component={SettingScreenStack}
       />
-      {rooms.map(room => (
-        <Drawer.Screen
-          key={room}
-          name="RoomScreenStack"
-          options={{drawerLabel: room}}
-          component={RoomScreenStack}
-          initialParams={{roomId: room}}
-        />
-      ))}
+      <Drawer.Screen
+        name="RoomScreenStack"
+        options={{drawerLabel: 'Chat'}}
+        component={RoomScreenStack}
+      />
     </Drawer.Navigator>
   );
 };
