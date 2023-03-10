@@ -33,7 +33,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb779999040151564</string>
+				<string>fb1207055786592486</string>
 			</array>
 		</dict>
 	</array>
@@ -42,9 +42,9 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Upload photos to chat</string>
 	<key>FacebookAppID</key>
-	<string>779999040151564</string>
+	<string>1207055786592486</string>
 	<key>FacebookClientToken</key>
-	<string>804ab24fe8b2c0155d12a6841ef2ad48</string>
+	<string>3134f1b56d8e2188a8547969fe16c69e</string>
 	<key>FacebookDisplayName</key>
 	<string>chatapp</string>
 	<key>LSApplicationQueriesSchemes</key>

@@ -143,18 +143,7 @@ const LoginScreen = ({
             style={{width: 192, height: 48}}
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
-            onPress={
-              loginDecorator(onGoogleButtonPress)
-              /*
-dispatch(setAuthProvider('Pending'));
-    onGoogleButtonPress().then(value => {
-      const [provider, msg] = value;
-      if (msg) setErrortext(msg);
-      dispatch(setAuthProvider(provider));
-    });
-  }
- */
-            }
+            onPress={loginDecorator(onGoogleButtonPress)}
             disabled={user.authProvider !== 'None'}
           />
         </View>
@@ -162,17 +151,7 @@ dispatch(setAuthProvider('Pending'));
           {user.authProvider === 'None' ? (
             <LoginButton
               permissions={['public_profile', 'email']}
-              onLoginFinished={
-                loginDecorator(onFBLoginFinished)
-                //   (error, result) => {
-                //   dispatch(setAuthProvider('Pending'));
-                //   onFBLoginFinished(error, result).then(value => {
-                //     const [provider, msg] = value;
-                //     if (msg) setErrortext(msg);
-                //     dispatch(setAuthProvider(provider));
-                //   });
-                // }
-              }
+              onLoginFinished={loginDecorator(onFBLoginFinished)}
             />
           ) : (
             <Button title="Login in progress..." disabled />

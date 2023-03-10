@@ -7,7 +7,10 @@
 
 import React, {PropsWithChildren} from 'react';
 
-import {NavigationContainer, NavigatorScreenParams} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -23,7 +26,7 @@ import {store} from './state';
 export type AuthStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
-}
+};
 
 export type RootStackParamList = {
   SplashScreen: undefined;

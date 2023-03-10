@@ -48,22 +48,9 @@ export const initGoogle = async () => {
   GoogleSignin.configure(params);
 };
 
-// export const autoGoogle = async () => {
-//   const user = GoogleSignin.getCurrentUser();
-// if(user) return credentialSignIn(user);
-//       : // Get the users ID token
-//         GoogleSignin.signInSilently()
-//           .then<withMsg<AuthProvider>>(credentialSignIn)
-//           // .catch(error => {
-//           //   if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-//           //     // user has not signed in yet
-//           //   }
-//           //   throw error;
-//           // })
-//           .catch<withMsg<AuthProvider>>(errorHandler),
-//   )};
-
-export const onGoogleButtonPress: () => Promise<withMsg<AuthProvider>> = async () => {
+export const onGoogleButtonPress: () => Promise<
+  withMsg<AuthProvider>
+> = async () => {
   try {
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
