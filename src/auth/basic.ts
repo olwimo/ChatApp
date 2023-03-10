@@ -3,9 +3,7 @@ import auth from '@react-native-firebase/auth';
 import {AuthProvider, withMsg} from '../state/types/user';
 
 export const autoBasic: () => withMsg<AuthProvider> = () =>
-  auth().currentUser
-    ? ['Basic']
-    : ['None', 'No Basic login'];
+  auth().currentUser ? ['Basic'] : ['None', 'No Basic login'];
 
 export const registerBasic = async (email: string, password: string) => {
   if (!email) {

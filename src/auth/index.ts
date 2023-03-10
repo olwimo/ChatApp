@@ -15,7 +15,9 @@ export const init = () => {
 
 export {registerBasic, loginBasic} from './basic';
 
-export const logout: (provider: AuthProvider) => Promise<withMsg<AuthProvider>> = async provider => {
+export const logout: (
+  provider: AuthProvider,
+) => Promise<withMsg<AuthProvider>> = async provider => {
   switch (provider) {
     case 'Basic':
       return logoutBasic();
@@ -24,10 +26,7 @@ export const logout: (provider: AuthProvider) => Promise<withMsg<AuthProvider>> 
     case 'FaceBook':
       return logoutFacebook();
     case 'Pending':
-      return [
-        'Pending',
-        'In progress!',
-      ];
+      return ['Pending', 'In progress!'];
     case 'None':
       return ['None', 'Not logged in!'];
   }

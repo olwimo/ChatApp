@@ -121,20 +121,6 @@ const SettingsScreen = (
 export default SettingsScreen;
 
 const styles = StyleSheet.create({
-  // mainBody: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   backgroundColor: '#307ecc',
-  //   alignContent: 'center',
-  // },
-  // SectionStyle: {
-  //   flexDirection: 'row',
-  //   height: 40,
-  //   marginTop: 20,
-  //   marginLeft: 35,
-  //   marginRight: 35,
-  //   margin: 10,
-  // },
   buttonStyle: {
     backgroundColor: '#7DE24E',
     borderWidth: 0,
@@ -162,17 +148,4 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: '#dadae8',
   },
-  // registerTextStyle: {
-  //   color: '#FFFFFF',
-  //   textAlign: 'center',
-  //   fontWeight: 'bold',
-  //   fontSize: 14,
-  //   alignSelf: 'center',
-  //   padding: 10,
-  // },
-  // errorTextStyle: {
-  //   color: 'red',
-  //   textAlign: 'center',
-  //   fontSize: 14,
-  // },
 });

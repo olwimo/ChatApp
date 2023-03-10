@@ -23,8 +23,6 @@ const RoomScreen = ({
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
-    // console.debug('userId changed: ' + user.userId);
-
     if (route.params.roomId) {
       const subscriber = firestore()
         .collection('chat')
@@ -58,32 +56,6 @@ const RoomScreen = ({
 
     return () => undefined;
   }, [route.params.roomId, count]);
-
-  // const user = useAppSelector(selectUser);
-  // const [rooms, setRooms] = useState<string[]>([]);
-
-  // useEffect(() => {
-  //   console.debug('userId changed: ' + user.userId);
-
-  //   if (user.userId) {
-  //     const roomsRef = firestore().collection('chat');
-
-  //     roomsRef.get().then(colSnapshot => {
-  //       if (colSnapshot.empty) {
-  //         return;
-  //       }
-  //       setRooms(colSnapshot.docs.map(docSnapshot => docSnapshot.id));
-  //       // console.debug(JSON.stringify(docSnapshot.data()));
-  //     });
-  //     // const subscriber = userRef.onSnapshot(doc => {
-  //     //   setName(doc.data()?.name);
-  //     // });
-
-  //     // return () => subscriber();
-  //   }
-
-  //   return () => undefined;
-  // }, [user.userId]);
 
   return (
     <SafeAreaView style={{flex: 1}}>

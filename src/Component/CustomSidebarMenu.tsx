@@ -8,8 +8,8 @@ import {
 } from '@react-navigation/drawer';
 
 import {logout} from '../auth';
-import { useAppDispatch, useAppSelector } from '../state';
-import { selectUser, setAuthProvider } from '../state/features/userSlice';
+import {useAppDispatch, useAppSelector} from '../state';
+import {selectUser, setAuthProvider} from '../state/features/userSlice';
 
 const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
   const dispatch = useAppDispatch();
@@ -49,7 +49,8 @@ const CustomSidebarMenu = (props: DrawerContentComponentProps) => {
                     const current = user.authProvider;
                     dispatch(setAuthProvider('Pending'));
                     const [provider, msg] = await logout(current);
-                    if (provider !== 'Pending') dispatch(setAuthProvider(provider));
+                    if (provider !== 'Pending')
+                      dispatch(setAuthProvider(provider));
                   },
                 },
               ],
