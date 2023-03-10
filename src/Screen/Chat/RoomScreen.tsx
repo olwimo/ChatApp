@@ -7,15 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import firestore from '@react-native-firebase/firestore';
 import {useAppSelector} from '../../state';
 import {selectUser} from '../../state/features/userSlice';
 import {StackParamList} from './Chat';
 
-const RoomScreen = ({
-  route,
-}: NativeStackScreenProps<StackParamList, 'RoomScreen'>) => {
+const RoomScreen = ({}: NativeStackScreenProps<
+  StackParamList,
+  'RoomScreen'
+>) => {
   const user = useAppSelector(selectUser);
+  const [rooms, setRooms] = useState<string[]>([]);
+  const [roomId, setRoomId] = useState<string>(rooms[0]);
   const [messages, setMessages] = useState<
     {text: string; posted: string; key: string}[]
   >([]);
@@ -23,10 +27,35 @@ const RoomScreen = ({
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
-    if (route.params.roomId) {
+    console.debug('userId changed: ' + user.userId);
+
+    if (user.userId) {
       const subscriber = firestore()
         .collection('chat')
-        .doc(route.params.roomId)
+        .onSnapshot(colSnapshot => {
+          if (colSnapshot.empty) {
+            return;
+          }
+          setRooms(colSnapshot.docs.map(docSnapshot => docSnapshot.id));
+        });
+
+      return () => subscriber();
+    }
+
+    return () => undefined;
+  }, [user.userId]);
+
+  useEffect(() => {
+    console.debug('rooms: ' + JSON.stringify(rooms));
+    setRoomId(rooms[0]);
+  }, [rooms]);
+
+  useEffect(() => {
+    console.debug('roomId: ' + roomId);
+    if (roomId) {
+      const subscriber = firestore()
+        .collection('chat')
+        .doc(roomId)
         .collection('messages')
         .orderBy('posted', 'asc')
         .limit(50)
@@ -55,11 +84,17 @@ const RoomScreen = ({
     }
 
     return () => undefined;
-  }, [route.params.roomId, count]);
+  }, [roomId, count]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Text>{route.params.roomId}:</Text>
+      <Picker
+        selectedValue={roomId}
+        onValueChange={(value, _index) => setRoomId(value)}>
+        {rooms.map(room => (
+          <Picker.Item key={room} label={room} value={room} />
+        ))}
+      </Picker>
       <View style={{flex: 1, padding: 16}}>
         <View
           style={{
@@ -93,7 +128,7 @@ const RoomScreen = ({
             if (!text) return;
             firestore()
               .collection('chat')
-              .doc(route.params.roomId)
+              .doc(roomId)
               .collection('messages')
               .add({
                 text: user.name + ': ' + text,
