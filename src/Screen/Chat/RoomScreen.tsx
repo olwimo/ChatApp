@@ -125,7 +125,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            if (!text) return;
+            if (!text || !roomId) return;
             firestore()
               .collection('chat')
               .doc(roomId)
