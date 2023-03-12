@@ -41,6 +41,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Upload photos to chat</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take camera photos to chat</string>
 	<key>FacebookAppID</key>
 	<string>1207055786592486</string>
 	<key>FacebookClientToken</key>

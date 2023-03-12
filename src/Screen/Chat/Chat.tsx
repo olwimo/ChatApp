@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import firestore from '@react-native-firebase/firestore';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -13,8 +12,6 @@ import NavigationDrawerHeader from '../../Component/NavigationDrawerHeader';
 import CustomSidebarMenu from '../../Component/CustomSidebarMenu';
 import SettingsScreen from './SettingsScreen';
 import {RootStackParamList} from '../../App';
-import {useAppSelector} from '../../state';
-import {selectUser} from '../../state/features/userSlice';
 import RoomScreen from './RoomScreen';
 
 export type StackParamList = {
@@ -86,7 +83,6 @@ const SettingScreenStack = ({
 };
 
 const Chat = (_props: NativeStackScreenProps<RootStackParamList, 'Chat'>) => {
-  const user = useAppSelector(selectUser);
   return (
     <Drawer.Navigator
       screenOptions={{
