@@ -640,9 +640,6 @@ PODS:
   - Firebase/Firestore (10.6.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.6.0)
-  - Firebase/Functions (10.6.0):
-    - Firebase/CoreOnly
-    - FirebaseFunctions (~> 10.6.0)
   - Firebase/Messaging (10.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.6.0)
@@ -677,14 +674,6 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseFunctions (10.6.0):
-    - FirebaseAppCheckInterop (~> 10.0)
-    - FirebaseAuthInterop (~> 10.0)
-    - FirebaseCore (~> 10.0)
-    - FirebaseCoreExtension (~> 10.0)
-    - FirebaseMessagingInterop (~> 10.0)
-    - FirebaseSharedSwift (~> 10.0)
-    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - FirebaseInstallations (10.6.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
@@ -699,8 +688,6 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseMessagingInterop (10.6.0)
-  - FirebaseSharedSwift (10.6.0)
   - FirebaseStorage (10.6.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -1072,6 +1059,8 @@ PODS:
     - FBSDKGamingServicesKit (~> 15.0.0)
     - FBSDKShareKit (~> 15.0.0)
     - React-Core
+  - react-native-image-picker (5.1.0):
+    - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
     - RCTRequired
@@ -1164,6 +1153,8 @@ PODS:
     - React-perflogger (= 0.71.3)
   - RNCMaskedView (0.2.8):
     - React-Core
+  - RNCPicker (2.4.8):
+    - React-Core
   - RNFBApp (17.3.2):
     - Firebase/CoreOnly (= 10.6.0)
     - React-Core
@@ -1174,10 +1165,6 @@ PODS:
   - RNFBFirestore (17.3.2):
     - Firebase/Firestore (= 10.6.0)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-    - React-Core
-    - RNFBApp
-  - RNFBFunctions (17.3.2):
-    - Firebase/Functions (= 10.6.0)
     - React-Core
     - RNFBApp
   - RNFBMessaging (17.3.2):
@@ -1257,6 +1244,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -1272,10 +1260,10 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
-  - "RNFBFunctions (from `../node_modules/@react-native-firebase/functions`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -1305,11 +1293,8 @@ SPEC REPOS:
     - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseFirestore
-    - FirebaseFunctions
     - FirebaseInstallations
     - FirebaseMessaging
-    - FirebaseMessagingInterop
-    - FirebaseSharedSwift
     - FirebaseStorage
     - fmt
     - GoogleDataTransport
@@ -1368,6 +1353,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-fbsdk-next:
     :path: "../node_modules/react-native-fbsdk-next"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -1398,14 +1385,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBFirestore:
     :path: "../node_modules/@react-native-firebase/firestore"
-  RNFBFunctions:
-    :path: "../node_modules/@react-native-firebase/functions"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
@@ -1447,11 +1434,8 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: 318e5ee9ad4092b00423c2bddd51c3f5c3585973
   FirebaseCoreInternal: c7cd505e2136811096b225ac388d6254a2622362
   FirebaseFirestore: f91b23a3c71448475d17163baf916d5d20d01609
-  FirebaseFunctions: 00d1f36edb73f589b7b22af06abc097d144644d9
   FirebaseInstallations: 13dde135fa0524e15bddb133ccc8465c53a1b3f3
   FirebaseMessaging: fd93783258c53ae5cdb9b41bf0c51606a677f2d5
-  FirebaseMessagingInterop: 9607c116534fc11e11925a312da989a5dd8e6827
-  FirebaseSharedSwift: 103ae5bacb5468cd7727ae141f338fa94d7ee1f2
   FirebaseStorage: 10d4f43a4ef98e7554da72197ad52216686ea990
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
@@ -1483,6 +1467,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 9f7c9137605e72ca0343db4cea88006cb94856dd
   React-logger: 957e5dc96d9dbffc6e0f15e0ee4d2b42829ff207
   react-native-fbsdk-next: c78dede90e3c50ab6936a7d56c43e1a9eb37e25a
+  react-native-image-picker: c33d4e79f0a14a2b66e5065e14946ae63749660b
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   React-perflogger: af8a3d31546077f42d729b949925cc4549f14def
   React-RCTActionSheet: 57cc5adfefbaaf0aae2cf7e10bccd746f2903673
@@ -1498,16 +1483,16 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7bf0dafc7b727d93c8cb94eb00a9d3753c446c3e
   ReactCommon: 5f9a24e64c1c3e2b719014f07cb2acf628983000
   RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
+  RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNFBApp: dd22a306a31189e99126a35962498c83b06520ab
   RNFBAuth: c0dbc7680a3181e460fdc2b4ba80851363c6946d
   RNFBFirestore: 8530d924a54b8e52dd89d0335bb161c41d36a252
-  RNFBFunctions: 00024bff9ad1b7fb90b7616f78bfcd7019968df0
   RNFBMessaging: 8c6192acc48b9daacbfe9da9cacca8bee740ce46
   RNFBStorage: 83ac3f2b388cdba567f7a39f59b5a895de8e38e4
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNGoogleSignin: 22e468a9474dbcb8618d8847205ad4f0b2575d13
   RNNotifee: 053c0ace9c73634709a0214fd9c436a5777a562f
-  RNPermissions: fe3f483d9111bef21751f23a6b44a24218549901
+  RNPermissions: 2610c7e6c84b2908b5d43410e2002d129e43da28
   RNReanimated: f0dd6b881808e635ef0673f89642937d6c141314
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   Yoga: 5ed1699acbba8863755998a4245daa200ff3817b

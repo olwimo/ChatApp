@@ -9,24 +9,26 @@ import {
   View,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import firestore from '@react-native-firebase/firestore';
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
 import {useAppSelector} from '../../state';
 import {selectUser} from '../../state/features/userSlice';
-import {StackParamList} from './Chat';
+import {ChatStackParamList} from './Chat';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const RoomScreen = ({}: NativeStackScreenProps<
-  StackParamList,
+  ChatStackParamList,
   'RoomScreen'
 >) => {
   const user = useAppSelector(selectUser);
   const [rooms, setRooms] = useState<string[]>([]);
   const [roomId, setRoomId] = useState<string>(rooms[0]);
-  const [messages, setMessages] = useState<
-    {kind: string; posted: string; author: string; key: string}[]
-  >([]);
+  const [messages, setMessages] = useState<{
+    [key: string]: {kind: string; posted: string; author: string};
+  }>({});
+  //   {kind: string; posted: string; author: string; key: string}[]
+  // >([]);
   const [currentTexts, setCurrentTexts] = useState<{[key: string]: any}>({});
   const [text, setText] = useState<string>('');
   const [errorText, setErrorText] = useState<string>('');
@@ -60,6 +62,8 @@ const RoomScreen = ({}: NativeStackScreenProps<
   useEffect(() => {
     console.debug('roomId: ' + roomId);
     if (roomId) {
+      setMessages(_ => ({}));
+
       const subscriber = firestore()
         .collection('chat')
         .doc(roomId)
@@ -67,70 +71,72 @@ const RoomScreen = ({}: NativeStackScreenProps<
         .orderBy('posted', 'asc')
         .limit(50)
         .onSnapshot(colSnapshot => {
-          if (colSnapshot.empty) {
-            setMessages([]);
-            return;
-          }
-          // messages.findIndex(message =>)
-          setCurrentTexts({});
+          if (colSnapshot.empty) return;
 
-          setMessages(
-            colSnapshot.docs.map(docSnapshot => {
-              // if (!docSnapshot.exists)
-              //   return {
-              //     text: 'Error: Not found',
-              //     posted: 'Never',
-              //   };
-              const data = docSnapshot.data();
-              const id = docSnapshot.id;
-              const message = typeof data.text === 'string' ? data.text : '';
-              const author = message.slice(0, message.indexOf(':'));
-              const text = message.slice(message.indexOf(':') + 1);
-              const kind = typeof data.kind === 'string' ? data.kind : '';
-              const posted = Date.parse(
-                typeof data.posted === 'string' ? data.posted : '',
-              ).toLocaleString();
+          setCurrentTexts(_ => {});
 
-              if (kind === 'bucket/image') {
-                setCurrentTexts(texts => ({
-                  ...texts,
-                  [id]: require('../../image/drawerWhite.png'),
-                }));
-                if (text)
-                  storage()
-                    .ref(text)
-                    .getDownloadURL()
-                    .then(url =>
-                      setCurrentTexts(texts => ({...texts, [id]: {uri: url}})),
-                    );
-              } else if (
-                typeof kind === 'string' &&
-                kind.indexOf('base64/image:') === 0
-              ) {
-                setCurrentTexts(texts => ({
-                  ...texts,
-                  [id]: {
-                    uri:
-                      'data:image/' +
-                      (kind.slice('base64/image:'.length) || 'jpeg') +
-                      ';base64,' +
-                      text,
-                  },
-                }));
-              } else {
-                setCurrentTexts(texts => ({
-                  ...texts,
-                  [id]: text,
-                }));
+          const nextTexts = colSnapshot.docs.reduce((acc, docSnapshot) => {
+            // if (!docSnapshot.exists)
+            //   return {
+            //     text: 'Error: Not found',
+            //     posted: 'Never',
+            //   };
+            const data: FirebaseFirestoreTypes.DocumentData = docSnapshot.data();
+            const key = docSnapshot.id;
+            const message = typeof data.text === 'string' ? data.text : '';
+            const author =
+              message.indexOf(':') !== -1
+                ? message.slice(0, message.indexOf(':'))
+                : '';
+            const content = message.slice(message.indexOf(':') + 1);
+            const kind = typeof data.kind === 'string' ? data.kind : '';
+            const posted = Date.parse(
+              typeof data.posted === 'string' ? data.posted : '',
+            ).toLocaleString();
+            // const texts: {[key: string]: any} = {};
+            setCurrentTexts(_ => {});
+
+            if (kind === 'bucket/image') {
+              setCurrentTexts(texts => ({
+                ...texts,
+                [key]: require('../../image/drawerWhite.png'),
+              }));
+              if (content) {
+                storage()
+                  .ref(content)
+                  .getDownloadURL()
+                  .then(url =>
+                    setCurrentTexts(texts => ({...texts, [key]: {uri: url}})),
+                  );
               }
-              return {
+            } else if (kind.indexOf('base64/image:') === 0) {
+              setCurrentTexts(texts => ({
+                ...texts,
+                [key]: {
+                  uri:
+                    'data:image/' +
+                    (kind.slice('base64/image:'.length) || 'jpeg') +
+                    ';base64,' +
+                    content,
+                },
+              }));
+            } else {
+              setCurrentTexts(texts => ({
+                ...texts,
+                [key]: content,
+              }));
+            }
+            return {
+              ...acc,
+              [key]: {
                 kind: kind,
                 posted: posted,
-                key: id,
                 author: author,
-              };
-            }),
-          );
+              },
+            };
+          }, {});
+          setMessages(_ => nextTexts);
+          console.debug('roomNextId: ' + JSON.stringify(nextTexts));
         });
 
       return () => subscriber();
@@ -149,20 +155,23 @@ const RoomScreen = ({}: NativeStackScreenProps<
         ))}
       </Picker>
       <View style={{flex: 1, padding: 16}}>
-        {messages.map(message => {
-          const text = currentTexts[message.key];
+        {Object.keys(messages).map(key => {
+          const content = currentTexts[key];
 
-          return message.kind === 'bucket/image' ? (
+          return messages[key].kind === 'bucket/image' ? (
             <View
               style={{
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-              }}>
-              <Text key={message.key}>{message.posted}: </Text>
+              }}
+              key={key}
+              >
+              <Text>
+                &#91;{messages[key].posted}&#93; {messages[key].author}:
+              </Text>
               <Image
-                key={message.key}
-                source={text}
+                source={content}
                 style={{
                   width: 25,
                   height: 25,
@@ -176,9 +185,11 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-              }}>
-              <Text key={message.key}>
-              &#91;{message.posted}&#93; {message.author}: {text}
+              }}
+              key={key}
+              >
+              <Text>
+                &#91;{messages[key].posted}&#93; {messages[key].author}: {content}
               </Text>
             </View>
           );
@@ -249,7 +260,10 @@ const RoomScreen = ({}: NativeStackScreenProps<
                       .doc(roomId)
                       .collection('messages')
                       .add({
-                        text: encodeURIComponent(user.name || '') + ':' + asset.base64,
+                        text:
+                          encodeURIComponent(user.name || '') +
+                          ':' +
+                          asset.base64,
                         posted: new Date().toISOString(),
                         kind: 'base64/image:' + asset.type,
                       })
@@ -261,7 +275,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
                   } else {
                     console.debug('Said: ' + asset.fileName);
                     setErrorText('Image: ' + asset.uri);
-                // firestore()
+                    // firestore()
                     // .collection('chat')
                     // .doc(roomId)
                     // .collection('messages')
