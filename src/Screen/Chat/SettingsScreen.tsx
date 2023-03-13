@@ -9,12 +9,12 @@ import {
   View,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {StackParamList} from './Chat';
+import {ChatStackParamList} from './Chat';
 import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setName} from '../../state/features/userSlice';
 
 const SettingsScreen = (
-  _props: NativeStackScreenProps<StackParamList, 'SettingsScreen'>,
+  _props: NativeStackScreenProps<ChatStackParamList, 'SettingsScreen'>,
 ) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
