@@ -84,7 +84,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
             setCurrentUsers(users => ({
               ...users,
               [key]: {
-                name: name,
+                name: decodeURIComponent(name),
                 avatar: require('../../image/drawerWhite.png'),
               },
             }));
@@ -188,6 +188,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
       <View style={{flex: 1, padding: 16}}>
         {Object.keys(messages).map(key => {
           const content = currentTexts[key];
+          console.debug(`currentUsers: ${JSON.stringify(currentUsers)}, messages[key]: ${JSON.stringify(messages[key])}`);
 
           return messages[key].kind === 'bucket/image' ? (
             <View
@@ -199,14 +200,14 @@ const RoomScreen = ({}: NativeStackScreenProps<
               key={key}>
               <Text>&#91;{messages[key].posted}&#93;</Text>
               <Image
-                source={currentUsers[messages[key].author].avatar}
+                source={currentUsers[messages[key].author]?.avatar || require('../../image/drawerWhite.png')}
                 style={{
                   width: 30,
                   height: 30,
                   margin: 5,
                 }}
               />
-              <Text>{currentUsers[messages[key].author].name}:</Text>
+              <Text>{currentUsers[messages[key].author]?.name || '<Loading name>'}:</Text>
               <Image
                 source={content}
                 style={{
@@ -226,7 +227,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
               key={key}>
               <Text>&#91;{messages[key].posted}&#93;</Text>
               <Image
-                source={currentUsers[messages[key].author].avatar}
+                source={currentUsers[messages[key].author]?.avatar || require('../../image/drawerWhite.png')}
                 style={{
                   width: 30,
                   height: 30,
@@ -234,7 +235,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 }}
               />
               <Text>
-                {currentUsers[messages[key].author].name}: {content}
+                {currentUsers[messages[key].author]?.name || '<Loading name>'}: {content}
               </Text>
             </View>
           );

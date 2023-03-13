@@ -119,8 +119,6 @@ const SettingsScreen = (
               }}>
               <Text style={styles.buttonTextStyle}>Apply</Text>
             </TouchableOpacity>
-          </View>
-          <View>
             <Image
               source={avatar}
               style={{
