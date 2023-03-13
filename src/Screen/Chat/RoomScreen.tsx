@@ -9,7 +9,9 @@ import {
   View,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
 import {useAppSelector} from '../../state';
@@ -63,6 +65,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
     console.debug('roomId: ' + roomId);
     if (roomId) {
       setMessages(_ => ({}));
+      setCurrentTexts(_ => ({}));
 
       const subscriber = firestore()
         .collection('chat')
@@ -73,7 +76,8 @@ const RoomScreen = ({}: NativeStackScreenProps<
         .onSnapshot(colSnapshot => {
           if (colSnapshot.empty) return;
 
-          setCurrentTexts(_ => {});
+          setMessages(_ => ({}));
+          setCurrentTexts(_ => ({}));
 
           const nextTexts = colSnapshot.docs.reduce((acc, docSnapshot) => {
             // if (!docSnapshot.exists)
@@ -81,17 +85,19 @@ const RoomScreen = ({}: NativeStackScreenProps<
             //     text: 'Error: Not found',
             //     posted: 'Never',
             //   };
-            const data: FirebaseFirestoreTypes.DocumentData = docSnapshot.data();
-            const key = docSnapshot.id;
+            const data: FirebaseFirestoreTypes.DocumentData =
+              docSnapshot.data();
+            const key: string = docSnapshot.id;
             const message = typeof data.text === 'string' ? data.text : '';
-            const author =
+            const author = decodeURIComponent(
               message.indexOf(':') !== -1
                 ? message.slice(0, message.indexOf(':'))
-                : '';
+                : '',
+            );
             const content = message.slice(message.indexOf(':') + 1);
             const kind = typeof data.kind === 'string' ? data.kind : '';
-            const posted = Date.parse(
-              typeof data.posted === 'string' ? data.posted : '',
+            const posted = new Date(
+              Date.parse(typeof data.posted === 'string' ? data.posted : ''),
             ).toLocaleString();
             // const texts: {[key: string]: any} = {};
             setCurrentTexts(_ => {});
@@ -136,7 +142,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
             };
           }, {});
           setMessages(_ => nextTexts);
-          console.debug('roomNextId: ' + JSON.stringify(nextTexts));
         });
 
       return () => subscriber();
@@ -165,19 +170,18 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              key={key}
-              >
+              key={key}>
               <Text>
                 &#91;{messages[key].posted}&#93; {messages[key].author}:
               </Text>
               <Image
                 source={content}
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 300,
+                  height: 300,
                   margin: 5,
                 }}
-              />{' '}
+              />
             </View>
           ) : (
             <View
@@ -186,10 +190,10 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              key={key}
-              >
+              key={key}>
               <Text>
-                &#91;{messages[key].posted}&#93; {messages[key].author}: {content}
+                &#91;{messages[key].posted}&#93; {messages[key].author}:{' '}
+                {content}
               </Text>
             </View>
           );
@@ -243,6 +247,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
               maxHeight: 300,
             })
               .then(image => {
+                console.debug(JSON.stringify(image));
                 if (image.didCancel) {
                   setErrorText('Image Upload: User cancelled');
                 } else if (image.errorCode) {
@@ -265,30 +270,44 @@ const RoomScreen = ({}: NativeStackScreenProps<
                           ':' +
                           asset.base64,
                         posted: new Date().toISOString(),
-                        kind: 'base64/image:' + asset.type,
+                        kind: 'base64/image:' + (asset.type || ''),
                       })
                       .then(() => {
                         console.debug('Said: ' + asset.fileName);
                         setErrorText('Base64 Image uploaded!');
                         setTimeout(() => setErrorText(''), 2000);
+                        setCount(count + 1);
                       });
+                  } else if (!asset.uri) {
+                    setErrorText("Image Upload: Didn't return uri");
                   } else {
                     console.debug('Said: ' + asset.fileName);
                     setErrorText('Image: ' + asset.uri);
-                    // firestore()
-                    // .collection('chat')
-                    // .doc(roomId)
-                    // .collection('messages')
-                    // .add({
-                    //   text: encodeURIComponent(user.name || '') + ':' + asset.base64,
-                    //   posted: new Date().toISOString(),
-                    //   kind: 'base64/image:' + asset.type,
-                    // })
-                    // .then(() => {
-                    //   console.debug('Said: ' + asset.fileName);
-                    //   setErrorText('Base64 Image uploaded!');
-                    //   setTimeout(() => setErrorText(''), 2000);
-                    // });
+                    const path =
+                      '/users/' +
+                      (user.userId || 'none') +
+                      '/' +
+                      (asset.fileName || 'none');
+                    const ref = storage().ref(path);
+
+                    ref.putFile(asset.uri.slice('file://'.length)).then(_ => {
+                      firestore()
+                        .collection('chat')
+                        .doc(roomId)
+                        .collection('messages')
+                        .add({
+                          text:
+                            encodeURIComponent(user.name || '') + ':' + path,
+                          posted: new Date().toISOString(),
+                          kind: 'bucket/image',
+                        })
+                        .then(() => {
+                          console.debug('Said: ' + asset.fileName);
+                          setErrorText('Base64 Image uploaded!');
+                          setTimeout(() => setErrorText(''), 2000);
+                          setCount(count + 1);
+                        });
+                    });
                   }
                 }
                 setTimeout(() => setErrorText(''), 2000);
@@ -297,7 +316,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 setErrorText('Image Library Error: ' + JSON.stringify(reason));
                 setTimeout(() => setErrorText(''), 2000);
               });
-            setCount(count + 1);
           }}>
           <Text>Send Image</Text>
         </TouchableOpacity>
