@@ -13,6 +13,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import messaging from '@react-native-firebase/messaging';
 
 import {useAppSelector} from '../../state';
 import {selectUser} from '../../state/features/userSlice';
@@ -62,8 +63,11 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, [rooms]);
 
   useEffect(() => {
-    console.debug('roomId: ' + roomId);
     if (roomId) {
+      messaging().subscribeToTopic(roomId).then(() => {
+        console.debug('roomId: ' + roomId);
+      });
+
       setMessages(_ => ({}));
       setCurrentTexts(_ => ({}));
 
