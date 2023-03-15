@@ -5,7 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {init} from '../../auth';
 import {useAppDispatch} from '../../state';
-import {setAuthProvider, setUserId} from '../../state/features/userSlice';
+import {setAuthProvider, setRoomId, setUserId} from '../../state/features/userSlice';
 
 const SplashScreen = ({
   navigation,
@@ -24,6 +24,7 @@ const SplashScreen = ({
       auth().onAuthStateChanged(userState => {
         console.debug('SplashScreen.tsx: AuthStateChanged: ' + userState?.uid);
         dispatch(setUserId(userState?.uid));
+        dispatch(setRoomId(undefined));
 
         if (userState) navigation.navigate('Chat');
         else navigation.navigate('Auth', {screen: 'LoginScreen'});

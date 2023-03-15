@@ -16,13 +16,13 @@ export const userSlice = createSlice({
     setUserId: (state, action: PayloadAction<string | undefined>) => {
       state.userId = action.payload;
     },
-    setName: (state, action: PayloadAction<string | undefined>) => {
-      state.name = action.payload;
+    setRoomId: (state, action: PayloadAction<string | undefined>) => {
+      state.roomId = action.payload;
     },
   },
 });
 
-export const {setAuthProvider, setUserId, setName} = userSlice.actions;
+export const {setAuthProvider, setUserId, setRoomId} = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 

@@ -12,14 +12,13 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {ChatStackParamList} from './Chat';
-import {useAppDispatch, useAppSelector} from '../../state';
-import {selectUser, setName} from '../../state/features/userSlice';
+import {useAppSelector} from '../../state';
+import {selectUser} from '../../state/features/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const SettingsScreen = (
   _props: NativeStackScreenProps<ChatStackParamList, 'SettingsScreen'>,
 ) => {
-  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   const [errorText, setErrorText] = useState<string>('');
@@ -35,20 +34,35 @@ const SettingsScreen = (
     if (user.userId) {
       const userRef = firestore().collection('users').doc(user.userId);
 
-      userRef.get().then(docSnapshot => {
-        if (!docSnapshot.exists) {
-          userRef.set({
-            name: encodeURIComponent('New user'),
-          });
-          // .then(() => setName());
-        }
-      });
+      // userRef.get().then(docSnapshot => {
+      //   if (!docSnapshot.exists) {
+      //     userRef.set({
+      //       name: encodeURIComponent('New user'),
+      //     });
+      //     // .then(() => setName());
+      //   } else {
+      //     const data = docSnapshot.data();
+      //     const name = decodeURIComponent(data?.name);
+      //     const avatar = data?.avatar;
+  
+      //     setNewName(name);
+  
+      //     setAvatar(require('../../image/drawerWhite.png'));
+      //     if (avatar) {
+      //       storage()
+      //         .ref(avatar)
+      //         .getDownloadURL()
+      //         .then(url => setAvatar({uri: url}));
+      //     }
+      //     }
+
+      // });
       const subscriber = userRef.onSnapshot(doc => {
         const data = doc.data();
         const name = decodeURIComponent(data?.name);
         const avatar = data?.avatar;
 
-        dispatch(setName(name));
+        console.debug(`name: ${name}`)
         setNewName(name);
 
         setAvatar(require('../../image/drawerWhite.png'));
@@ -96,7 +110,7 @@ const SettingsScreen = (
               returnKeyType="next"
               underlineColorAndroid="#f000"
               blurOnSubmit={false}>
-              {user.name}
+              {newName}
             </TextInput>
             <TouchableOpacity
               style={styles.buttonStyle}

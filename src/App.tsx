@@ -21,7 +21,8 @@ import LoginScreen from './Screen/Login';
 import RegisterScreen from './Screen/Register';
 import Chat from './Screen/Chat';
 import {Provider} from 'react-redux';
-import {store} from './state';
+import {persistor, store} from './state';
+import {PersistGate} from 'redux-persist/integration/react';
 
 export type AuthStackParamList = {
   LoginScreen: undefined;
@@ -67,29 +68,31 @@ const Auth = (_props: NativeStackScreenProps<RootStackParamList, 'Auth'>) => {
 const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="SplashScreen">
-          {/*SplashScreen while loading*/}
-          <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            options={{headerShown: false}}
-          />
-          {/* Auth Navigator which includer Login Signup will come once */}
-          <Stack.Screen
-            name="Auth"
-            component={Auth}
-            options={{headerShown: false}}
-          />
-          {/* Navigation Drawer as a landing page */}
-          <Stack.Screen
-            name="Chat"
-            component={Chat}
-            // Hiding header for Navigation Drawer as we will use our custom header
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="SplashScreen">
+            {/*SplashScreen while loading*/}
+            <Stack.Screen
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{headerShown: false}}
+            />
+            {/* Auth Navigator which includer Login Signup will come once */}
+            <Stack.Screen
+              name="Auth"
+              component={Auth}
+              options={{headerShown: false}}
+            />
+            {/* Navigation Drawer as a landing page */}
+            <Stack.Screen
+              name="Chat"
+              component={Chat}
+              // Hiding header for Navigation Drawer as we will use our custom header
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 };
