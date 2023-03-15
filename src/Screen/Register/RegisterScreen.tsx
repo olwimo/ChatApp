@@ -32,7 +32,7 @@ const RegisterScreen = ({
   useFocusEffect(
     React.useCallback(() => {
       if (['None', 'Pending'].indexOf(user.authProvider) === -1) {
-        navigation.navigate('DrawerNavigationRoutes');
+        navigation.navigate('Chat');
         console.debug('Forced to leave register screen');
       }
       setErrortext('');

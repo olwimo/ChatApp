@@ -4,5 +4,5 @@ export type withMsg<T> = [T, string?]
 export interface UserState {
     authProvider: AuthProvider;
     userId?: string;
-    name?: string;
+    roomId?: string;
 };
