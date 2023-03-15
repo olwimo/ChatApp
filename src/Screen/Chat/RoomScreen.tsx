@@ -13,9 +13,11 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 
-import {useAppSelector} from '../../state';
-import {selectUser} from '../../state/features/userSlice';
+import {useAppDispatch, useAppSelector} from '../../state';
+import {selectUser, setRoomId} from '../../state/features/userSlice';
 import {ChatStackParamList} from './Chat';
 import {launchImageLibrary} from 'react-native-image-picker';
 
@@ -23,9 +25,11 @@ const RoomScreen = ({}: NativeStackScreenProps<
   ChatStackParamList,
   'RoomScreen'
 >) => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+
   const [rooms, setRooms] = useState<string[]>([]);
-  const [roomId, setRoomId] = useState<string>(rooms[0]);
+  // const [roomId, setRoomId] = useState<string>(rooms[0]);
   const [messages, setMessages] = useState<{
     [key: string]: {kind: string; posted: string; author: string};
   }>({});
@@ -38,6 +42,16 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const [text, setText] = useState<string>('');
   const [errorText, setErrorText] = useState<string>('');
   const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    const onMessageReceived = async (message: FirebaseMessagingTypes.RemoteMessage) => {
+      if (message.data?.roomId !== user.roomId) return;
+      if (typeof message.data?.notifee === 'string') notifee.displayNotification(JSON.parse(message.data?.notifee));
+      setCount(count + 1);
+    };
+    messaging().onMessage(onMessageReceived);
+    messaging().setBackgroundMessageHandler(onMessageReceived);
+  }, [])
 
   useEffect(() => {
     console.debug('userId changed: ' + user.userId);
@@ -61,11 +75,11 @@ const RoomScreen = ({}: NativeStackScreenProps<
 
   useEffect(() => {
     console.debug('rooms: ' + JSON.stringify(rooms));
-    setRoomId(rooms[0]);
+    if (!user.roomId) dispatch(setRoomId(rooms[0]));
   }, [rooms]);
 
   useEffect(() => {
-    if (roomId) {
+    if (user.roomId) {
       const subscriber = firestore()
         .collection('users')
         .onSnapshot(colSnapshot => {
@@ -109,14 +123,14 @@ const RoomScreen = ({}: NativeStackScreenProps<
     }
 
     return () => undefined;
-  }, [roomId, count]);
+  }, [user.roomId, count]);
 
   useEffect(() => {
-    console.debug('roomId: ' + roomId);
-    if (roomId) {
+    console.debug('roomId: ' + user.roomId);
+    if (user.roomId) {
       const subscriber = firestore()
         .collection('chat')
-        .doc(roomId)
+        .doc(user.roomId)
         .collection('messages')
         .orderBy('posted', 'asc')
         .limit(50)
@@ -174,12 +188,12 @@ const RoomScreen = ({}: NativeStackScreenProps<
     }
 
     return () => undefined;
-  }, [roomId, count]);
+  }, [user.roomId, count]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <Picker
-        selectedValue={roomId}
+        selectedValue={user.roomId}
         onValueChange={(value, _index) => setRoomId(value)}>
         {rooms.map(room => (
           <Picker.Item key={room} label={room} value={room} />
@@ -257,10 +271,10 @@ const RoomScreen = ({}: NativeStackScreenProps<
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            if (!text || !roomId) return;
+            if (!text || !user.roomId) return;
             firestore()
               .collection('chat')
-              .doc(roomId)
+              .doc(user.roomId)
               .collection('messages')
               .add({
                 text: text,
@@ -283,7 +297,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            if (!roomId) return;
+            if (!user.roomId) return;
             launchImageLibrary({
               mediaType: 'photo',
               maxWidth: 300,
@@ -319,7 +333,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
                     ref.putFile(asset.uri.slice('file://'.length)).then(_ => {
                       firestore()
                         .collection('chat')
-                        .doc(roomId)
+                        .doc(user.roomId)
                         .collection('messages')
                         .add({
                           text: path,
