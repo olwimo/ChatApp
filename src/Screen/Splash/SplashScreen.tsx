@@ -19,15 +19,17 @@ const SplashScreen = ({
       const [provider, msg] = init();
       if (msg) console.debug(msg);
       dispatch(setAuthProvider(provider));
+      return () => undefined;
     } else {
-      // const unsubscribe =
-      auth().onAuthStateChanged(userState => {
+      const subscriber = auth().onAuthStateChanged(userState => {
         console.debug('SplashScreen.tsx: AuthStateChanged: ' + userState?.uid);
         dispatch(setUserId(userState?.uid));
 
         if (userState) navigation.navigate('Chat');
         else navigation.navigate('Auth', {screen: 'LoginScreen'});
       });
+
+      return subscriber;
     }
   }, [animating]);
 
