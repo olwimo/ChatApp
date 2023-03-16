@@ -26,7 +26,7 @@ const SplashScreen = ({
         dispatch(setUserId(userState?.uid));
         dispatch(setRoomId(undefined));
 
-        if (userState) navigation.navigate('Chat');
+        if (userState) navigation.navigate('Chat', {screen: 'SettingsScreen'});
         else navigation.navigate('Auth', {screen: 'LoginScreen'});
       });
     }

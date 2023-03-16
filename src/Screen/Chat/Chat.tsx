@@ -22,7 +22,6 @@ const Chat = (_props: NativeStackScreenProps<RootStackParamList, 'Chat'>) => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        // headerShown: false,
         drawerActiveTintColor: '#cee1f2',
         drawerContentStyle: {shadowColor: '#cee1f2'},
         drawerItemStyle: {
