@@ -190,7 +190,7 @@ const RegisterScreen = ({
               activeOpacity={0.5}
               onPress={handleSubmitButton}>
               <Text
-                //  onPress={handleSubmitButton}
+                 onPress={handleSubmitButton}
                 style={styles.buttonTextStyle}>
                 REGISTER
               </Text>

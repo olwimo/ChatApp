@@ -52,8 +52,7 @@ const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
               <Stack.Screen
                 name="Chat"
                 component={Chat}
-                // // Hiding header for Navigation Drawer as we will use our custom header
-                // options={{headerShown: false}}
+                options={{headerShown: false}}
               />
             </Stack.Navigator>
           </NavigationContainer>

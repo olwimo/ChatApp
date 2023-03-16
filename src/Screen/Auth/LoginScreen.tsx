@@ -218,13 +218,13 @@ const LoginScreen = ({
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle} onPress={handleSubmitPress}>LOGIN</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={() => navigation.navigate('RegisterScreen')}>
-              <Text style={styles.buttonTextStyle}>Register</Text>
+              <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('RegisterScreen')}>Register</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
