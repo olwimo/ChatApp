@@ -309,7 +309,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
             );
 
             return messages[key].kind === 'bucket/image' ? (
-              <Section key={key} title={`&#91;${messages[key].posted}&#93;:`}>
+              <Section key={key} title={messages[key].posted}>
                 <Image
                   source={
                     currentUsers[messages[key].author]?.avatar ||
@@ -335,7 +335,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 />
               </Section>
             ) : (
-              <Section key={key} title={`&#91;${messages[key].posted}&#93;:`}>
+              <Section key={key} title={messages[key].posted}>
                 <Image
                   source={
                     currentUsers[messages[key].author]?.avatar ||
@@ -367,6 +367,15 @@ const RoomScreen = ({}: NativeStackScreenProps<
               blurOnSubmit={false}>
               {text}
             </TextInput>
+            {errorText ? <Text>{errorText}</Text> : undefined}
+          </Section>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
@@ -387,8 +396,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
               onPress={handleImageButton}>
               <Text onPress={handleImageButton}>Send Image</Text>
             </TouchableOpacity>
-            {errorText ? <Text>{errorText}</Text> : undefined}
-          </Section>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
