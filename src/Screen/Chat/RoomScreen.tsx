@@ -26,6 +26,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {ScrollView} from 'react-native-gesture-handler';
 import Section from '../../Component/Section';
+import styles from '../../styles';
 
 const RoomScreen = ({}: NativeStackScreenProps<
   ChatStackParamList,
@@ -47,6 +48,84 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const [text, setText] = useState<string>('');
   const [errorText, setErrorText] = useState<string>('');
   const [count, setCount] = useState<number>(0);
+
+  const handleSendButton = () => {
+    if (!text || !user.roomId) return;
+    firestore()
+      .collection('chat')
+      .doc(user.roomId)
+      .collection('messages')
+      .add({
+        text: text,
+        author: user.userId || 'admin',
+        posted: new Date().toISOString(),
+        kind: 'text/plain',
+      })
+      .then(() => {
+        console.debug('Said: ' + text);
+        setText('');
+      });
+  };
+
+  const handleImageButton = () => {
+    if (!user.roomId) return;
+    launchImageLibrary({
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 300,
+    })
+      .then(image => {
+        console.debug(JSON.stringify(image));
+        if (image.didCancel) {
+          setErrorText('Image Upload: User cancelled');
+        } else if (image.errorCode) {
+          setErrorText(
+            `Image Upload Error code ${image.errorCode}: ${image.errorMessage}`,
+          );
+        } else if (image.assets?.length !== 1) {
+          setErrorText("Image Upload: Didn't choose exactly one image");
+        } else {
+          const asset = image.assets[0];
+
+          if (!asset.uri || !asset.fileName) {
+            setErrorText("Image Upload: Didn't return both uri and filename");
+          } else {
+            console.debug('Said: ' + asset.fileName);
+            setErrorText('Image: ' + asset.uri);
+            const path =
+              '/users/' +
+              (user.userId || 'none') +
+              '/' +
+              (asset.fileName || 'none');
+            const ref = storage().ref(path);
+
+            ref.putFile(asset.uri.slice('file://'.length)).then(_ => {
+              firestore()
+                .collection('chat')
+                .doc(user.roomId)
+                .collection('messages')
+                .add({
+                  text: path,
+                  author: user.userId || 'admin',
+                  posted: new Date().toISOString(),
+                  kind: 'bucket/image',
+                })
+                .then(() => {
+                  console.debug('Said: ' + asset.fileName);
+                  setErrorText('Image uploaded!');
+                  setTimeout(() => setErrorText(''), 2000);
+                  // setCount(count + 1);
+                });
+            });
+          }
+        }
+        setTimeout(() => setErrorText(''), 2000);
+      })
+      .catch(reason => {
+        setErrorText('Image Library Error: ' + JSON.stringify(reason));
+        setTimeout(() => setErrorText(''), 2000);
+      });
+  };
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -205,7 +284,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, [user.roomId, count]);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={{...backgroundStyle, height: '100%'}}>
       <Picker
         selectedValue={user.roomId}
         onValueChange={(value, _index) => dispatch(setRoomId(value))}>
@@ -213,12 +292,13 @@ const RoomScreen = ({}: NativeStackScreenProps<
           <Picker.Item key={room} label={room} value={room} />
         ))}
       </Picker>
-      <KeyboardAvoidingView enabled>
+      <KeyboardAvoidingView enabled style={{height: '100%'}}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            height: '100%',
           }}>
           {Object.keys(messages).map(key => {
             const content = currentTexts[key];
@@ -229,7 +309,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
             );
 
             return messages[key].kind === 'bucket/image' ? (
-              <Section key={key} title="&#91;{messages[key].posted}&#93;:">
+              <Section key={key} title={`&#91;${messages[key].posted}&#93;:`}>
                 <Image
                   source={
                     currentUsers[messages[key].author]?.avatar ||
@@ -255,7 +335,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
                 />
               </Section>
             ) : (
-              <Section key={key} title="&#91;{messages[key].posted}&#93;:">
+              <Section key={key} title={`&#91;${messages[key].posted}&#93;:`}>
                 <Image
                   source={
                     currentUsers[messages[key].author]?.avatar ||
@@ -288,101 +368,24 @@ const RoomScreen = ({}: NativeStackScreenProps<
               {text}
             </TextInput>
             <TouchableOpacity
+              style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => {
-                if (!text || !user.roomId) return;
-                firestore()
-                  .collection('chat')
-                  .doc(user.roomId)
-                  .collection('messages')
-                  .add({
-                    text: text,
-                    author: user.userId || 'admin',
-                    posted: new Date().toISOString(),
-                    kind: 'text/plain',
-                  })
-                  .then(() => {
-                    console.debug('Said: ' + text);
-                    setText('');
-                  });
-              }}>
-              <Text>Send</Text>
+              onPress={handleSendButton}>
+              <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
+                Send
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={() => setCount(count + 1)}>
-              <Text>Update</Text>
+              <Text onPress={() => setCount(count + 1)}>Update</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => {
-                if (!user.roomId) return;
-                launchImageLibrary({
-                  mediaType: 'photo',
-                  maxWidth: 300,
-                  maxHeight: 300,
-                })
-                  .then(image => {
-                    console.debug(JSON.stringify(image));
-                    if (image.didCancel) {
-                      setErrorText('Image Upload: User cancelled');
-                    } else if (image.errorCode) {
-                      setErrorText(
-                        `Image Upload Error code ${image.errorCode}: ${image.errorMessage}`,
-                      );
-                    } else if (image.assets?.length !== 1) {
-                      setErrorText(
-                        "Image Upload: Didn't choose exactly one image",
-                      );
-                    } else {
-                      const asset = image.assets[0];
-
-                      if (!asset.uri || !asset.fileName) {
-                        setErrorText(
-                          "Image Upload: Didn't return both uri and filename",
-                        );
-                      } else {
-                        console.debug('Said: ' + asset.fileName);
-                        setErrorText('Image: ' + asset.uri);
-                        const path =
-                          '/users/' +
-                          (user.userId || 'none') +
-                          '/' +
-                          (asset.fileName || 'none');
-                        const ref = storage().ref(path);
-
-                        ref
-                          .putFile(asset.uri.slice('file://'.length))
-                          .then(_ => {
-                            firestore()
-                              .collection('chat')
-                              .doc(user.roomId)
-                              .collection('messages')
-                              .add({
-                                text: path,
-                                author: user.userId || 'admin',
-                                posted: new Date().toISOString(),
-                                kind: 'bucket/image',
-                              })
-                              .then(() => {
-                                console.debug('Said: ' + asset.fileName);
-                                setErrorText('Image uploaded!');
-                                setTimeout(() => setErrorText(''), 2000);
-                                // setCount(count + 1);
-                              });
-                          });
-                      }
-                    }
-                    setTimeout(() => setErrorText(''), 2000);
-                  })
-                  .catch(reason => {
-                    setErrorText(
-                      'Image Library Error: ' + JSON.stringify(reason),
-                    );
-                    setTimeout(() => setErrorText(''), 2000);
-                  });
-              }}>
-              <Text>Send Image</Text>
+              onPress={handleImageButton}>
+              <Text onPress={handleImageButton}>Send Image</Text>
             </TouchableOpacity>
             {errorText ? <Text>{errorText}</Text> : undefined}
           </Section>
