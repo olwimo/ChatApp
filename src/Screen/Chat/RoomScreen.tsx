@@ -284,22 +284,21 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, [user.roomId, count]);
 
   return (
-    <SafeAreaView style={{...backgroundStyle, height: '100%'}}>
-      <Picker
-        selectedValue={user.roomId}
-        onValueChange={(value, _index) => dispatch(setRoomId(value))}>
-        {rooms.map(room => (
-          <Picker.Item key={room} label={room} value={room} />
-        ))}
-      </Picker>
-      <KeyboardAvoidingView enabled style={{height: '100%'}}>
+    <SafeAreaView style={backgroundStyle}>
+      <KeyboardAvoidingView enabled>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            height: '100%',
           }}>
+          <Picker
+            selectedValue={user.roomId}
+            onValueChange={(value, _index) => dispatch(setRoomId(value))}>
+            {rooms.map(room => (
+              <Picker.Item key={room} label={room} value={room} />
+            ))}
+          </Picker>
           {Object.keys(messages).map(key => {
             const content = currentTexts[key];
             console.debug(
@@ -354,49 +353,58 @@ const RoomScreen = ({}: NativeStackScreenProps<
               </Section>
             );
           })}
-
           <Section title="Say:">
             <TextInput
+              autoFocus={true}
+              style={styles.inputStyle}
               onChangeText={text => setText(text)}
               placeholder="Say something"
               placeholderTextColor="#8b9cb5"
               autoCapitalize="none"
               keyboardType="default"
-              returnKeyType="next"
+              onSubmitEditing={handleSendButton}
+              mode={'outlined'}
               underlineColorAndroid="#f000"
-              blurOnSubmit={false}>
-              {text}
-            </TextInput>
-            {errorText ? <Text>{errorText}</Text> : undefined}
+              returnKeyType="default"
+            />
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+              }}>
+              {errorText ? <Text>{errorText}</Text> : undefined}
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                activeOpacity={0.5}
+                onPress={handleSendButton}>
+                <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                activeOpacity={0.5}
+                onPress={() => setCount(count + 1)}>
+                <Text
+                  onPress={() => setCount(count + 1)}
+                  style={styles.buttonTextStyle}>
+                  Update
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                activeOpacity={0.5}
+                onPress={handleImageButton}>
+                <Text
+                  onPress={handleImageButton}
+                  style={styles.buttonTextStyle}>
+                  Send Image
+                </Text>
+              </TouchableOpacity>
+            </View>
           </Section>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSendButton}>
-              <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
-                Send
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={() => setCount(count + 1)}>
-              <Text onPress={() => setCount(count + 1)}>Update</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleImageButton}>
-              <Text onPress={handleImageButton}>Send Image</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
