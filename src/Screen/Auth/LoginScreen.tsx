@@ -5,7 +5,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -39,9 +38,6 @@ const LoginScreen = ({
 
   const isDarkMode = useColorScheme() === 'dark';
 
-  // const refEmail = React.createRef<BasicTextInput>();
-  // const refPassword = React.createRef<BasicTextInput>();
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -57,9 +53,6 @@ const LoginScreen = ({
     };
   };
   const fieldData: FieldData = (() => {
-    // const [userEmail, setUserEmail] = useState('');
-    // const [userPassword, setUserPassword] = useState('');
-
     return fields.reduce<FieldData>((acc, field) => {
       const [value, setValue] = useState<string>('');
       acc[field] = {
@@ -102,9 +95,6 @@ const LoginScreen = ({
       dispatch(setAuthProvider(provider));
     };
 
-  // const [userEmail, setUserEmail] = useState('');
-  // const [userPassword, setUserPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
 
@@ -125,52 +115,24 @@ const LoginScreen = ({
   return (
     <SafeAreaView style={backgroundStyle}>
       <Loader loading={loading} />
-      {/* <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}> */}
-      {/* <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          flex: 1,
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}> */}
       <KeyboardAvoidingView enabled>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
-          // style={backgroundStyle}
           contentContainerStyle={{
             ...backgroundStyle,
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            // ...styles.sectionCenter,
           }}>
-          {/* <View
-            style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}> */}
-          <View style={styles.sectionCenter}>
+          <View style={{alignItems: 'center'}}>
             <Image
               source={require('../../image/logo.png')}
               style={{
                 width: '50%',
                 height: 100,
-                // resizeMode: 'contain',
+                resizeMode: 'contain',
                 margin: 30,
               }}
             />
           </View>
-          {/* <View style={{alignItems: 'center'}}>
-              <Image
-                source={require('../../image/logo.png')}
-                style={{
-                  width: '50%',
-                  height: 100,
-                  resizeMode: 'contain',
-                  margin: 30,
-                }}
-              />
-            </View> */}
-          {/* <View style={styles.SectionStyle}> */}
           <Section title="Login:">
             <TextInput
               style={styles.inputStyle}
@@ -185,8 +147,6 @@ const LoginScreen = ({
               underlineColorAndroid="#f000"
               blurOnSubmit={false}
             />
-            {/* </View>
-            <View style={styles.SectionStyle}> */}
             <TextInput
               style={styles.inputStyle}
               ref={fieldData['password']?.ref}
@@ -200,7 +160,6 @@ const LoginScreen = ({
               underlineColorAndroid="#f000"
               returnKeyType="next"
             />
-            {/* </View> */}
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
@@ -214,7 +173,6 @@ const LoginScreen = ({
             </TouchableOpacity>
           </Section>
           <Section title="Providers:">
-            {/* <View> */}
             <GoogleSigninButton
               style={{width: 192, height: 48}}
               size={GoogleSigninButton.Size.Wide}
@@ -222,8 +180,6 @@ const LoginScreen = ({
               onPress={loginDecorator(onGoogleButtonPress)}
               disabled={user.authProvider !== 'None'}
             />
-            {/* </View>
-        <View> */}
             {user.authProvider === 'None' ? (
               <LoginButton
                 permissions={['public_profile', 'email']}
@@ -234,7 +190,6 @@ const LoginScreen = ({
                 Login in progress...
               </Button>
             )}
-            {/* </View> */}
           </Section>
           <Section title="Create account:">
             <TouchableOpacity
@@ -249,79 +204,9 @@ const LoginScreen = ({
             </TouchableOpacity>
           </Section>
         </ScrollView>
-        {/* </View> */}
       </KeyboardAvoidingView>
-      {/* </View> */}
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
 
 export default LoginScreen;
-
-// const localStyles = StyleSheet.create({
-//   registerTextStyle: {
-//     color: '#FFFFFF',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//     fontSize: 14,
-//     alignSelf: 'center',
-//     padding: 10,
-//   },
-// });
-// const styles = StyleSheet.create({
-//   mainBody: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     backgroundColor: '#307ecc',
-//     alignContent: 'center',
-//   },
-//   SectionStyle: {
-//     flexDirection: 'row',
-//     height: 40,
-//     marginTop: 20,
-//     marginLeft: 35,
-//     marginRight: 35,
-//     margin: 10,
-//   },
-//   buttonStyle: {
-//     backgroundColor: '#7DE24E',
-//     borderWidth: 0,
-//     color: '#FFFFFF',
-//     borderColor: '#7DE24E',
-//     height: 40,
-//     alignItems: 'center',
-//     borderRadius: 30,
-//     marginLeft: 35,
-//     marginRight: 35,
-//     marginTop: 20,
-//     marginBottom: 25,
-//   },
-//   buttonTextStyle: {
-//     color: '#FFFFFF',
-//     paddingVertical: 10,
-//     fontSize: 16,
-//   },
-//   inputStyle: {
-//     flex: 1,
-//     color: 'white',
-//     paddingLeft: 15,
-//     paddingRight: 15,
-//     borderWidth: 1,
-//     borderRadius: 30,
-//     borderColor: '#dadae8',
-//   },
-//   registerTextStyle: {
-//     color: '#FFFFFF',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//     fontSize: 14,
-//     alignSelf: 'center',
-//     padding: 10,
-//   },
-//   errorTextStyle: {
-//     color: 'red',
-//     textAlign: 'center',
-//     fontSize: 14,
-//   },
-// });
