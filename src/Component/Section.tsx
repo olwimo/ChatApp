@@ -1,18 +1,16 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
-import {
-  Platform,
-  PlatformColor,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {Text, useColorScheme, View} from 'react-native';
+import styles from '../styles';
 
 const Section = ({children, title}: PropsWithChildren<{title: string}>) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
+    <View
+      style={{
+        ...styles.sectionContainer,
+        ...styles.sectionCenter,
+      }}>
       <Text
         style={[
           styles.sectionTitle,
@@ -20,60 +18,16 @@ const Section = ({children, title}: PropsWithChildren<{title: string}>) => {
         ]}>
         {title}
       </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          isDarkMode ? styles.sectionDark : styles.sectionLight,
-        ]}>
+      <View
+        style={{
+          ...styles.sectionDescription,
+          ...(isDarkMode ? styles.sectionDark : styles.sectionLight),
+          ...styles.sectionCenter,
+        }}>
         {children}
-      </Text>
+      </View>
     </View>
   );
 };
 
 export default Section;
-
-const styles = StyleSheet.create({
-  sectionDark: {
-    ...Platform.select({
-      ios: {
-        color: PlatformColor('darkText'),
-      },
-      android: {
-        color: PlatformColor('@android:color/primary_text_dark'),
-      },
-      default: {
-        color: 'white',
-      },
-    }),
-  },
-  sectionLight: {
-    ...Platform.select({
-      ios: {
-        color: PlatformColor('lightText'),
-      },
-      android: {
-        color: PlatformColor('@android:color/primary_text_light'),
-      },
-      default: {
-        color: 'black',
-      },
-    }),
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});

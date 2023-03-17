@@ -26,6 +26,7 @@ import {AuthStackParamList} from './Auth';
 import styles from '../../styles';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Section from '../../Component/Section';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const LoginScreen = ({
   navigation,
@@ -122,35 +123,43 @@ const LoginScreen = ({
   };
 
   return (
-    <View style={{...styles.mainBody, ...backgroundStyle}}>
+    <SafeAreaView style={backgroundStyle}>
       <Loader loading={loading} />
-      <ScrollView
+      {/* <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        {/* <ScrollView
+        style={backgroundStyle}> */}
+      {/* <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
           flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
         }}> */}
-        <View style={{alignItems: 'center'}}>
-          <Image
-            source={require('../../image/logo.png')}
-            style={{
-              width: '50%',
-              height: 100,
-              resizeMode: 'contain',
-              margin: 30,
-            }}
-          />
-        </View>
-        <KeyboardAvoidingView enabled>
-          <View
+      <KeyboardAvoidingView enabled>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          // style={backgroundStyle}
+          contentContainerStyle={{
+            ...backgroundStyle,
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            // ...styles.sectionCenter,
+          }}>
+          {/* <View
             style={{
               backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}>
-            {/* <View style={{alignItems: 'center'}}>
+            }}> */}
+          <View style={styles.sectionCenter}>
+            <Image
+              source={require('../../image/logo.png')}
+              style={{
+                width: '50%',
+                height: 100,
+                // resizeMode: 'contain',
+                margin: 30,
+              }}
+            />
+          </View>
+          {/* <View style={{alignItems: 'center'}}>
               <Image
                 source={require('../../image/logo.png')}
                 style={{
@@ -161,56 +170,37 @@ const LoginScreen = ({
                 }}
               />
             </View> */}
-            {/* <View style={styles.SectionStyle}> */}
-            <Section title="Login">
-              <TextInput
-                style={styles.inputStyle}
-                ref={fieldData['email']?.ref}
-                onChangeText={fieldData['email']?.set}
-                placeholder="Enter Email" //dummy@abc.com
-                placeholderTextColor="#8b9cb5"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                returnKeyType="next"
-                underlineColorAndroid="#f000"
-                blurOnSubmit={false}
-              />
-              {/* </View>
+          {/* <View style={styles.SectionStyle}> */}
+          <Section title="Login:">
+            <TextInput
+              style={styles.inputStyle}
+              ref={fieldData['email']?.ref}
+              onChangeText={fieldData['email']?.set}
+              onSubmitEditing={nextActiveField}
+              placeholder="Enter Email" //dummy@abc.com
+              placeholderTextColor="#8b9cb5"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+              underlineColorAndroid="#f000"
+              blurOnSubmit={false}
+            />
+            {/* </View>
             <View style={styles.SectionStyle}> */}
-              <TextInput
-                style={styles.inputStyle}
-                ref={fieldData['password']?.ref}
-                onChangeText={fieldData['password']?.set}
-                placeholder="Enter Password" //12345
-                placeholderTextColor="#8b9cb5"
-                keyboardType="default"
-                onSubmitEditing={Keyboard.dismiss}
-                blurOnSubmit={false}
-                secureTextEntry={true}
-                underlineColorAndroid="#f000"
-                returnKeyType="next"
-              />
-              {/* </View> */}
-              {/* <View> */}
-              <GoogleSigninButton
-                style={{width: 192, height: 48}}
-                size={GoogleSigninButton.Size.Wide}
-                color={GoogleSigninButton.Color.Dark}
-                onPress={loginDecorator(onGoogleButtonPress)}
-                disabled={user.authProvider !== 'None'}
-              />
-              {/* </View>
-        <View> */}
-              {user.authProvider === 'None' ? (
-                <LoginButton
-                  permissions={['public_profile', 'email']}
-                  onLoginFinished={loginDecorator(onFBLoginFinished)}
-                />
-              ) : (
-                <Button disabled>Login in progress...</Button>
-              )}
-              {/* </View> */}
-            </Section>
+            <TextInput
+              style={styles.inputStyle}
+              ref={fieldData['password']?.ref}
+              onChangeText={fieldData['password']?.set}
+              placeholder="Enter Password" //12345
+              placeholderTextColor="#8b9cb5"
+              keyboardType="default"
+              onSubmitEditing={Keyboard.dismiss}
+              blurOnSubmit={false}
+              secureTextEntry={true}
+              underlineColorAndroid="#f000"
+              returnKeyType="next"
+            />
+            {/* </View> */}
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
@@ -218,19 +208,52 @@ const LoginScreen = ({
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle} onPress={handleSubmitPress}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle} onPress={handleSubmitPress}>
+                LOGIN
+              </Text>
             </TouchableOpacity>
+          </Section>
+          <Section title="Providers:">
+            {/* <View> */}
+            <GoogleSigninButton
+              style={{width: 192, height: 48}}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={loginDecorator(onGoogleButtonPress)}
+              disabled={user.authProvider !== 'None'}
+            />
+            {/* </View>
+        <View> */}
+            {user.authProvider === 'None' ? (
+              <LoginButton
+                permissions={['public_profile', 'email']}
+                onLoginFinished={loginDecorator(onFBLoginFinished)}
+              />
+            ) : (
+              <Button style={{width: 192, height: 48}} disabled>
+                Login in progress...
+              </Button>
+            )}
+            {/* </View> */}
+          </Section>
+          <Section title="Create account:">
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={() => navigation.navigate('RegisterScreen')}>
-              <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('RegisterScreen')}>Register</Text>
+              <Text
+                style={styles.buttonTextStyle}
+                onPress={() => navigation.navigate('RegisterScreen')}>
+                Register
+              </Text>
             </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
+          </Section>
+        </ScrollView>
         {/* </View> */}
-      </ScrollView>
-    </View>
+      </KeyboardAvoidingView>
+      {/* </View> */}
+      {/* </ScrollView> */}
+    </SafeAreaView>
   );
 };
 

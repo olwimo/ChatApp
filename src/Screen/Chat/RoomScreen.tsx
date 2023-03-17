@@ -2,7 +2,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
   Image,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -20,6 +19,7 @@ import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setRoomId} from '../../state/features/userSlice';
 import {ChatStackParamList} from './Chat';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RoomScreen = ({}: NativeStackScreenProps<
   ChatStackParamList,

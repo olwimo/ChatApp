@@ -2,7 +2,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -15,6 +14,7 @@ import {ChatStackParamList} from './Chat';
 import {useAppSelector} from '../../state';
 import {selectUser} from '../../state/features/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SettingsScreen = (
   _props: NativeStackScreenProps<ChatStackParamList, 'SettingsScreen'>,
