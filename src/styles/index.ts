@@ -7,14 +7,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#307ecc',
     alignContent: 'center',
   },
-  // SectionStyle: {
-  //   flexDirection: 'row',
-  //   height: 40,
-  //   marginTop: 20,
-  //   marginLeft: 35,
-  //   marginRight: 35,
-  //   margin: 10,
-  // },
   buttonStyle: {
     backgroundColor: '#7DE24E',
     borderWidth: 0,

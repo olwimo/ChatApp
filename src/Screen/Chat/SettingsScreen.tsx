@@ -14,7 +14,7 @@ import {ChatStackParamList} from './Chat';
 import {useAppSelector} from '../../state';
 import {selectUser} from '../../state/features/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SettingsScreen = (
   _props: NativeStackScreenProps<ChatStackParamList, 'SettingsScreen'>,
@@ -34,35 +34,12 @@ const SettingsScreen = (
     if (user.userId) {
       const userRef = firestore().collection('users').doc(user.userId);
 
-      // userRef.get().then(docSnapshot => {
-      //   if (!docSnapshot.exists) {
-      //     userRef.set({
-      //       name: encodeURIComponent('New user'),
-      //     });
-      //     // .then(() => setName());
-      //   } else {
-      //     const data = docSnapshot.data();
-      //     const name = decodeURIComponent(data?.name);
-      //     const avatar = data?.avatar;
-  
-      //     setNewName(name);
-  
-      //     setAvatar(require('../../image/drawerWhite.png'));
-      //     if (avatar) {
-      //       storage()
-      //         .ref(avatar)
-      //         .getDownloadURL()
-      //         .then(url => setAvatar({uri: url}));
-      //     }
-      //     }
-
-      // });
       const subscriber = userRef.onSnapshot(doc => {
         const data = doc.data();
         const name = decodeURIComponent(data?.name);
         const avatar = data?.avatar;
 
-        console.debug(`name: ${name}`)
+        console.debug(`name: ${name}`);
         setNewName(name);
 
         setAvatar(require('../../image/drawerWhite.png'));
@@ -210,22 +187,6 @@ const SettingsScreen = (
             </TouchableOpacity>
           </View>
         </View>
-        {/* <Text
-          style={{
-            fontSize: 18,
-            textAlign: 'center',
-            color: 'grey',
-          }}>
-          Chat App{'\n'}React Native
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: 'center',
-            color: 'grey',
-          }}>
-          www.github.com/olwimo
-        </Text> */}
         {errorText ? <Text>{errorText}</Text> : undefined}
       </View>
     </SafeAreaView>

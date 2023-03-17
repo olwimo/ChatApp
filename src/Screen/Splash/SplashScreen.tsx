@@ -19,9 +19,9 @@ const SplashScreen = ({
       const [provider, msg] = init();
       if (msg) console.debug(msg);
       dispatch(setAuthProvider(provider));
+      return () => undefined;
     } else {
-      // const unsubscribe =
-      auth().onAuthStateChanged(userState => {
+      const unsubscribe = auth().onAuthStateChanged(userState => {
         console.debug('SplashScreen.tsx: AuthStateChanged: ' + userState?.uid);
         dispatch(setUserId(userState?.uid));
         dispatch(setRoomId(undefined));
@@ -29,6 +29,7 @@ const SplashScreen = ({
         if (userState) navigation.navigate('Chat', {screen: 'SettingsScreen'});
         else navigation.navigate('Auth', {screen: 'LoginScreen'});
       });
+      return unsubscribe;
     }
   }, [animating]);
 

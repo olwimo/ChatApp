@@ -29,7 +29,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const user = useAppSelector(selectUser);
 
   const [rooms, setRooms] = useState<string[]>([]);
-  // const [roomId, setRoomId] = useState<string>(rooms[0]);
   const [messages, setMessages] = useState<{
     [key: string]: {kind: string; posted: string; author: string};
   }>({});
@@ -194,7 +193,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
     <SafeAreaView style={{flex: 1}}>
       <Picker
         selectedValue={user.roomId}
-        onValueChange={(value, _index) => setRoomId(value)}>
+        onValueChange={(value, _index) => dispatch(setRoomId(value))}>
         {rooms.map(room => (
           <Picker.Item key={room} label={room} value={room} />
         ))}
