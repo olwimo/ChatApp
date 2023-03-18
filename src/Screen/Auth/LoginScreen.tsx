@@ -10,7 +10,7 @@ import {
   View,
   TextInput as BasicTextInput,
 } from 'react-native';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {Button, MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
@@ -23,7 +23,6 @@ import {AuthProvider, withMsg} from '../../state/types/user';
 import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 import {AuthStackParamList} from './Auth';
 import styles from '../../styles';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Section from '../../Component/Section';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -39,7 +38,7 @@ const LoginScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -119,7 +118,7 @@ const LoginScreen = ({
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image

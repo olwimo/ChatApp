@@ -8,7 +8,7 @@ import {
   View,
   TextInput as BasicTextInput,
 } from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -20,7 +20,6 @@ import {selectUser, setAuthProvider} from '../../state/features/userSlice';
 import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 import {AuthStackParamList} from './Auth';
 import Section from '../../Component/Section';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import styles from '../../styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -50,7 +49,7 @@ const RegisterScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -105,7 +104,7 @@ const RegisterScreen = ({
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image

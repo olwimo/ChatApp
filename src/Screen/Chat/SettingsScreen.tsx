@@ -1,6 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput} from 'react-native-paper';
+import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 import {
   Image,
   KeyboardAvoidingView,
@@ -17,7 +17,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../../styles';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Section from '../../Component/Section';
 
 const SettingsScreen = (
@@ -49,7 +48,7 @@ const SettingsScreen = (
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
   };
 
   useEffect(() => {
@@ -85,7 +84,7 @@ const SettingsScreen = (
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
