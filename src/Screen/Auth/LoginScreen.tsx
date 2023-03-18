@@ -134,7 +134,6 @@ const LoginScreen = ({
           </View>
           <Section title="Login:">
             <TextInput
-              style={styles.inputStyle}
               ref={fieldData['email']?.ref}
               onChangeText={fieldData['email']?.set}
               onSubmitEditing={nextActiveField}
@@ -144,20 +143,21 @@ const LoginScreen = ({
               keyboardType="email-address"
               returnKeyType="next"
               underlineColorAndroid="#f000"
-              blurOnSubmit={false}
+              onFocus={() => setActiveField('email')}
+              mode={activeField === 'email' ? 'outlined' : 'flat'}
             />
             <TextInput
-              style={styles.inputStyle}
               ref={fieldData['password']?.ref}
               onChangeText={fieldData['password']?.set}
               placeholder="Enter Password" //12345
               placeholderTextColor="#8b9cb5"
               keyboardType="default"
-              onSubmitEditing={Keyboard.dismiss}
-              blurOnSubmit={false}
+              onSubmitEditing={handleSubmitPress}
               secureTextEntry={true}
               underlineColorAndroid="#f000"
               returnKeyType="next"
+              onFocus={() => setActiveField('password')}
+              mode={activeField === 'password' ? 'outlined' : 'flat'}
             />
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>

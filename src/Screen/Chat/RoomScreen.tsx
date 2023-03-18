@@ -344,7 +344,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
           <Section title="Say:">
             <TextInput
               autoFocus={true}
-              style={styles.inputStyle}
               onChangeText={text => setText(text)}
               placeholder="Say something"
               placeholderTextColor="#8b9cb5"

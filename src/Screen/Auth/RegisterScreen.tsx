@@ -119,31 +119,31 @@ const RegisterScreen = ({
             />
           </View>
           <Section title="Register">
-            <TextInput
-              autoFocus={true}
-              style={styles.inputStyle}
+          <TextInput
               ref={fieldData['email']?.ref}
               onChangeText={fieldData['email']?.set}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Email"
+              onSubmitEditing={nextActiveField}
+              placeholder="Enter Email" //dummy@abc.com
               placeholderTextColor="#8b9cb5"
+              autoCapitalize="none"
               keyboardType="email-address"
               returnKeyType="next"
-              onSubmitEditing={nextActiveField}
+              underlineColorAndroid="#f000"
+              onFocus={() => setActiveField('email')}
               mode={activeField === 'email' ? 'outlined' : 'flat'}
             />
             <TextInput
-              style={styles.inputStyle}
               ref={fieldData['password']?.ref}
               onChangeText={fieldData['password']?.set}
               placeholder="Enter Password" //12345
               placeholderTextColor="#8b9cb5"
               keyboardType="default"
               onSubmitEditing={handleSubmitButton}
-              mode={activeField === 'password' ? 'outlined' : 'flat'}
               secureTextEntry={true}
               underlineColorAndroid="#f000"
               returnKeyType="next"
+              onFocus={() => setActiveField('password')}
+              mode={activeField === 'password' ? 'outlined' : 'flat'}
             />
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
