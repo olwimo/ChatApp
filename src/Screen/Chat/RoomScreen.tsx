@@ -126,7 +126,9 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   useEffect(() => {
@@ -278,19 +280,21 @@ const RoomScreen = ({}: NativeStackScreenProps<
   return (
     <SafeAreaView style={backgroundStyle}>
       <KeyboardAvoidingView enabled>
+        <Picker
+          selectedValue={user.roomId}
+          onValueChange={(value, _index) => dispatch(setRoomId(value))}>
+          {rooms.map(room => (
+            <Picker.Item key={room} label={room} value={room} />
+          ))}
+        </Picker>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
-          <Picker
-            selectedValue={user.roomId}
-            onValueChange={(value, _index) => dispatch(setRoomId(value))}>
-            {rooms.map(room => (
-              <Picker.Item key={room} label={room} value={room} />
-            ))}
-          </Picker>
           {Object.keys(messages).map(key => {
             const content = currentTexts[key];
 
@@ -340,59 +344,57 @@ const RoomScreen = ({}: NativeStackScreenProps<
               </Section>
             );
           })}
-          <Section title="Say:">
-            <TextInput
-              autoFocus={true}
-              onChangeText={text => setText(text)}
-              placeholder="Say something"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize="none"
-              keyboardType="default"
-              onSubmitEditing={handleSendButton}
-              mode={'outlined'}
-              underlineColorAndroid="#f000"
-              returnKeyType="default"
-              value={text}
-            />
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-              }}>
-              {errorText ? <Text>{errorText}</Text> : undefined}
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={handleSendButton}>
-                <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
-                  Send
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={() => setCount(count + 1)}>
-                <Text
-                  onPress={() => setCount(count + 1)}
-                  style={styles.buttonTextStyle}>
-                  Update
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={handleImageButton}>
-                <Text
-                  onPress={handleImageButton}
-                  style={styles.buttonTextStyle}>
-                  Send Image
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Section>
         </ScrollView>
+        <Section title="Say:">
+          <TextInput
+            autoFocus={true}
+            onChangeText={text => setText(text)}
+            placeholder="Say something"
+            placeholderTextColor="#8b9cb5"
+            autoCapitalize="none"
+            keyboardType="default"
+            onSubmitEditing={handleSendButton}
+            mode={'outlined'}
+            underlineColorAndroid="#f000"
+            returnKeyType="default"
+            value={text}
+          />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+            }}>
+            {errorText ? <Text>{errorText}</Text> : undefined}
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={handleSendButton}>
+              <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
+                Send
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => setCount(count + 1)}>
+              <Text
+                onPress={() => setCount(count + 1)}
+                style={styles.buttonTextStyle}>
+                Update
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={handleImageButton}>
+              <Text onPress={handleImageButton} style={styles.buttonTextStyle}>
+                Send Image
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Section>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
