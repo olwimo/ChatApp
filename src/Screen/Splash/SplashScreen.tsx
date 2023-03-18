@@ -16,13 +16,11 @@ const SplashScreen = ({
 
   useEffect(() => {
     if (animating) {
-      const [provider, msg] = init();
-      if (msg) console.debug(msg);
+      const [provider, _msg] = init();
       dispatch(setAuthProvider(provider));
       return () => undefined;
     } else {
       const unsubscribe = auth().onAuthStateChanged(userState => {
-        console.debug('SplashScreen.tsx: AuthStateChanged: ' + userState?.uid);
         dispatch(setUserId(userState?.uid));
         dispatch(setRoomId(undefined));
 
@@ -35,7 +33,6 @@ const SplashScreen = ({
 
   useEffect(() => {
     setTimeout(() => {
-      console.debug('SplashScreen.tsx: timeout, animating is ' + animating);
       setAnimating(false);
     }, 2000);
   }, []);

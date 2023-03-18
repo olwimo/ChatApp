@@ -37,7 +37,6 @@ const RegisterScreen = ({
     React.useCallback(() => {
       if (['None', 'Pending'].indexOf(user.authProvider) === -1) {
         navigation.navigate('Chat', {screen: 'SettingsScreen'});
-        console.debug('Forced to leave register screen');
       }
       setErrortext('');
 
@@ -85,7 +84,6 @@ const RegisterScreen = ({
   }, [activeField]);
 
   const handleSubmitButton = () => {
-    console.debug('RegisterScreen.tsx: Pressed');
     setErrortext('');
     setLoading(true);
     registerBasic(
