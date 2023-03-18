@@ -109,9 +109,9 @@ const SettingsScreen = (
               onSubmitEditing={handleSubmitButton}
               mode={'outlined'}
               returnKeyType="default"
-              underlineColorAndroid="#f000">
-              {newName}
-            </TextInput>
+              underlineColorAndroid="#f000"
+              value={newName}
+            />
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
