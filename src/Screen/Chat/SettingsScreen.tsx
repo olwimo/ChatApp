@@ -43,10 +43,7 @@ const SettingsScreen = (
         {
           merge: true,
         },
-      )
-      .then(() => {
-        console.debug('Name changed to ' + newName);
-      });
+      );
   };
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -56,8 +53,6 @@ const SettingsScreen = (
   };
 
   useEffect(() => {
-    console.debug('userId changed: ' + user.userId);
-
     if (user.userId) {
       const userRef = firestore().collection('users').doc(user.userId);
 
@@ -66,7 +61,6 @@ const SettingsScreen = (
         const name = decodeURIComponent(data?.name);
         const avatar = data?.avatar;
 
-        console.debug(`name: ${name}`);
         setNewName(name);
 
         setAvatar(require('../../image/drawerWhite.png'));
@@ -145,7 +139,6 @@ const SettingsScreen = (
                   maxHeight: 60,
                 })
                   .then(image => {
-                    console.debug(JSON.stringify(image));
                     if (image.didCancel) {
                       setErrorText('Image Upload: User cancelled');
                     } else if (image.errorCode) {
@@ -164,7 +157,6 @@ const SettingsScreen = (
                           "Image Upload: Didn't return both uri and filename",
                         );
                       } else {
-                        console.debug('Avatar: ' + asset.fileName);
                         setErrorText(`Uploading ${asset.fileName}`);
                         // const suffix = asset.fileName.slice((asset.fileName.lastIndexOf('.') + 1) || asset.fileName.length);
                         const path =
@@ -184,10 +176,7 @@ const SettingsScreen = (
                                 {
                                   merge: true,
                                 },
-                              )
-                              .then(() => {
-                                console.debug('Avatar changed to ' + path);
-                              });
+                              );
                           });
                       }
                     }

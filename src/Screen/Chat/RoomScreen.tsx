@@ -51,6 +51,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
 
   const handleSendButton = () => {
     if (!text || !user.roomId) return;
+
     firestore()
       .collection('chat')
       .doc(user.roomId)
@@ -62,7 +63,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
         kind: 'text/plain',
       })
       .then(() => {
-        console.debug('Said: ' + text);
         setText('');
       });
   };
@@ -75,7 +75,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
       maxHeight: 300,
     })
       .then(image => {
-        console.debug(JSON.stringify(image));
         if (image.didCancel) {
           setErrorText('Image Upload: User cancelled');
         } else if (image.errorCode) {
@@ -90,7 +89,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
           if (!asset.uri || !asset.fileName) {
             setErrorText("Image Upload: Didn't return both uri and filename");
           } else {
-            console.debug('Said: ' + asset.fileName);
             setErrorText('Image: ' + asset.uri);
             const path =
               '/users/' +
@@ -111,7 +109,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
                   kind: 'bucket/image',
                 })
                 .then(() => {
-                  console.debug('Said: ' + asset.fileName);
                   setErrorText('Image uploaded!');
                   setTimeout(() => setErrorText(''), 2000);
                   // setCount(count + 1);
@@ -147,8 +144,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, []);
 
   useEffect(() => {
-    console.debug('userId changed: ' + user.userId);
-
     if (user.userId) {
       const subscriber = firestore()
         .collection('chat')
@@ -167,7 +162,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, [user.userId]);
 
   useEffect(() => {
-    console.debug('rooms: ' + JSON.stringify(rooms));
     if (!user.roomId) dispatch(setRoomId(rooms[0]));
   }, [rooms]);
 
@@ -219,7 +213,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
   }, [user.roomId, count]);
 
   useEffect(() => {
-    console.debug('roomId: ' + user.roomId);
     if (user.roomId) {
       const subscriber = firestore()
         .collection('chat')
@@ -301,11 +294,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
           </Picker>
           {Object.keys(messages).map(key => {
             const content = currentTexts[key];
-            console.debug(
-              `currentUsers: ${JSON.stringify(
-                currentUsers,
-              )}, messages[key]: ${JSON.stringify(messages[key])}`,
-            );
 
             return messages[key].kind === 'bucket/image' ? (
               <Section key={key} title={messages[key].posted}>
@@ -366,6 +354,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
               mode={'outlined'}
               underlineColorAndroid="#f000"
               returnKeyType="default"
+              value={text}
             />
             <View
               style={{
