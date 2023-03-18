@@ -18,8 +18,9 @@ import Chat, {ChatStackParamList} from './Screen/Chat';
 import {Provider} from 'react-redux';
 import {persistor, store} from './state';
 import {PersistGate} from 'redux-persist/integration/react';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {MD3DarkTheme, MD3LightTheme, Provider as PaperProvider} from 'react-native-paper';
 import Auth, {AuthStackParamList} from './Screen/Auth';
+import { useColorScheme } from 'react-native';
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -30,10 +31,11 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: (_props: PropsWithChildren<{}>) => JSX.Element = _props => {
+  const isDarkMode = useColorScheme() === 'dark';
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <PaperProvider>
+        <PaperProvider theme={isDarkMode ? MD3DarkTheme : MD3LightTheme}>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="SplashScreen">
               {/*SplashScreen while loading*/}

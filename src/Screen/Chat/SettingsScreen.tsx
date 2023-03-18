@@ -101,7 +101,6 @@ const SettingsScreen = (
           <Section title="Chat App in React Native" />
           <Section title="Name:">
             <TextInput
-              style={styles.inputStyle}
               onChangeText={name => setNewName(name)}
               placeholder="Enter name" //dummy@abc.com
               placeholderTextColor="#8b9cb5"
