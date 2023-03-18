@@ -9,8 +9,15 @@ import {
   useColorScheme,
   View,
   TextInput as BasicTextInput,
+  Platform,
 } from 'react-native';
-import {Button, MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
+import {
+  Button,
+  MD3DarkTheme,
+  MD3LightTheme,
+  Text,
+  TextInput,
+} from 'react-native-paper';
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
@@ -25,6 +32,7 @@ import {AuthStackParamList} from './Auth';
 import styles from '../../styles';
 import Section from '../../Component/Section';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const LoginScreen = ({
   navigation,
@@ -35,10 +43,14 @@ const LoginScreen = ({
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
+  const headerHeight = useHeaderHeight();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -113,12 +125,15 @@ const LoginScreen = ({
   return (
     <SafeAreaView style={backgroundStyle}>
       <Loader loading={loading} />
-      <KeyboardAvoidingView enabled>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image

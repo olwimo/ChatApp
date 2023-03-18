@@ -7,6 +7,7 @@ import {
   useColorScheme,
   View,
   TextInput as BasicTextInput,
+  Platform,
 } from 'react-native';
 import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 
@@ -22,6 +23,7 @@ import {AuthStackParamList} from './Auth';
 import Section from '../../Component/Section';
 import styles from '../../styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const RegisterScreen = ({
   navigation,
@@ -31,6 +33,8 @@ const RegisterScreen = ({
 >) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+
+  const headerHeight = useHeaderHeight();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -49,7 +53,9 @@ const RegisterScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -99,12 +105,17 @@ const RegisterScreen = ({
   return (
     <SafeAreaView style={backgroundStyle}>
       <Loader loading={loading} />
-      <KeyboardAvoidingView enabled>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={headerHeight}
+        enabled>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
@@ -118,7 +129,7 @@ const RegisterScreen = ({
             />
           </View>
           <Section title="Register">
-          <TextInput
+            <TextInput
               ref={fieldData['email']?.ref}
               onChangeText={fieldData['email']?.set}
               onSubmitEditing={nextActiveField}

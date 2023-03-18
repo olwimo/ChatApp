@@ -4,6 +4,7 @@ import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 import {
   Image,
   KeyboardAvoidingView,
+  Platform,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -18,11 +19,14 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../../styles';
 import {ScrollView} from 'react-native-gesture-handler';
 import Section from '../../Component/Section';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const SettingsScreen = (
   _props: NativeStackScreenProps<ChatStackParamList, 'SettingsScreen'>,
 ) => {
   const user = useAppSelector(selectUser);
+
+  const headerHeight = useHeaderHeight();
 
   const [errorText, setErrorText] = useState<string>('');
 
@@ -48,7 +52,9 @@ const SettingsScreen = (
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   useEffect(() => {
@@ -79,12 +85,17 @@ const SettingsScreen = (
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <KeyboardAvoidingView enabled>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={headerHeight}
+        enabled>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image

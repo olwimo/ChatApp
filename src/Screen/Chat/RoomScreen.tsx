@@ -4,6 +4,7 @@ import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 import {
   Image,
   KeyboardAvoidingView,
+  Platform,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -26,6 +27,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import Section from '../../Component/Section';
 import styles from '../../styles';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 const RoomScreen = ({}: NativeStackScreenProps<
   ChatStackParamList,
@@ -33,6 +35,8 @@ const RoomScreen = ({}: NativeStackScreenProps<
 >) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+
+  const headerHeight = useHeaderHeight();
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [messages, setMessages] = useState<{
@@ -279,7 +283,10 @@ const RoomScreen = ({}: NativeStackScreenProps<
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <KeyboardAvoidingView enabled>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={headerHeight}
+        enabled>
         <Picker
           selectedValue={user.roomId}
           onValueChange={(value, _index) => dispatch(setRoomId(value))}>
