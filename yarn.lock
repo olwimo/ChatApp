@@ -1534,11 +1534,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@notifee/react-native@^7.5.0":
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-7.5.0.tgz#3d846b6a607a6352e798a3440cd3880c005a7d56"
-  integrity sha512-FR1xzQI2KpMyLuM7YZyHHjCcOXbjAcBWMeRlarro8peujr6gJZSg4j2Aw4o8O4ifMHDopFrovwyK1uYBaB9MUg==
-
 "@react-native-async-storage/async-storage@^1.17.12":
   version "1.17.12"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.12.tgz#a39e4df5b06795ce49b2ca5b7ca9b8faadf8e621"
@@ -1775,11 +1770,6 @@
   version "17.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-17.3.2.tgz#1b15d65bd0cb042f48cbbb4b85eeff0c0dcb5796"
   integrity sha512-ZqdtYcZExAdfFXIntfy5/hTRK8jAyZnQCbpCyvC3O8f1m4C2pDo57xLzTdukORtJjiBGkxBpcULLBrSbOJ/SXw==
-
-"@react-native-firebase/messaging@^17.3.2":
-  version "17.3.2"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-17.3.2.tgz#1d37fdf8cc3027542fdbab871f5df3ea2fb687c8"
-  integrity sha512-7IO12OjNdjtvtxHXY/8qJ9a0RLTg4cUddnE1sNxj3RciDz+Sx7SRJX0fsyX19i1m7dcPh73p9NzrrtnvNnILfw==
 
 "@react-native-firebase/storage@^17.3.2":
   version "17.3.2"

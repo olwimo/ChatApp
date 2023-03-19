@@ -13,10 +13,6 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import messaging, {
-  FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native';
 
 import {useAppDispatch, useAppSelector} from '../../state';
 import {selectUser, setRoomId} from '../../state/features/userSlice';
@@ -128,19 +124,6 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const backgroundStyle = {
     backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
   };
-
-  useEffect(() => {
-    const onMessageReceived = async (
-      message: FirebaseMessagingTypes.RemoteMessage,
-    ) => {
-      if (message.data?.roomId !== user.roomId) return;
-      if (typeof message.data?.notifee === 'string')
-        notifee.displayNotification(JSON.parse(message.data?.notifee));
-      setCount(count + 1);
-    };
-    messaging().onMessage(onMessageReceived);
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-  }, []);
 
   useEffect(() => {
     if (user.userId) {
