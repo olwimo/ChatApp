@@ -4,7 +4,7 @@ import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 import {
   Image,
   KeyboardAvoidingView,
-  TouchableOpacity,
+  Pressable,
   useColorScheme,
   View,
 } from 'react-native';
@@ -48,7 +48,9 @@ const SettingsScreen = (
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   useEffect(() => {
@@ -84,7 +86,9 @@ const SettingsScreen = (
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
@@ -110,12 +114,16 @@ const SettingsScreen = (
               underlineColorAndroid="#f000"
               value={newName}
             />
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitButton}>
-              <Text style={styles.buttonTextStyle}>Apply</Text>
-            </TouchableOpacity>
+            <Pressable style={styles.buttonStyle} onPress={handleSubmitButton}>
+              {({pressed}) => (
+                <Text
+                  style={
+                    pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                  }>
+                  Apply
+                </Text>
+              )}
+            </Pressable>
           </Section>
           <Section title="Avatar:">
             <Text>Avatar:</Text>
@@ -127,9 +135,8 @@ const SettingsScreen = (
                 margin: 5,
               }}
             />
-            <TouchableOpacity
+            <Pressable
               style={styles.buttonStyle}
-              activeOpacity={0.5}
               onPress={() => {
                 launchImageLibrary({
                   mediaType: 'photo',
@@ -187,8 +194,15 @@ const SettingsScreen = (
                     setTimeout(() => setErrorText(''), 2000);
                   });
               }}>
-              <Text style={styles.buttonTextStyle}>Choose avatar</Text>
-            </TouchableOpacity>
+              {({pressed}) => (
+                <Text
+                  style={
+                    pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                  }>
+                  Choose avatar
+                </Text>
+              )}
+            </Pressable>
             {errorText ? <Text>{errorText}</Text> : undefined}
           </Section>
         </ScrollView>

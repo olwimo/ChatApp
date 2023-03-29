@@ -2,15 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Image,
-  Keyboard,
   KeyboardAvoidingView,
   ScrollView,
-  TouchableOpacity,
   useColorScheme,
   View,
   TextInput as BasicTextInput,
+  Pressable,
 } from 'react-native';
-import {Button, MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
+import {
+  Button,
+  MD3DarkTheme,
+  MD3LightTheme,
+  Text,
+  TextInput,
+} from 'react-native-paper';
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
@@ -38,7 +43,9 @@ const LoginScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -118,7 +125,9 @@ const LoginScreen = ({
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
@@ -161,14 +170,16 @@ const LoginScreen = ({
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle} onPress={handleSubmitPress}>
-                LOGIN
-              </Text>
-            </TouchableOpacity>
+            <Pressable style={styles.buttonStyle} onPress={handleSubmitPress}>
+              {({pressed}) => (
+                <Text
+                  style={
+                    pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                  }>
+                  LOGIN
+                </Text>
+              )}
+            </Pressable>
           </Section>
           <Section title="Providers:">
             <GoogleSigninButton
@@ -190,16 +201,18 @@ const LoginScreen = ({
             )}
           </Section>
           <Section title="Create account:">
-            <TouchableOpacity
+            <Pressable
               style={styles.buttonStyle}
-              activeOpacity={0.5}
               onPress={() => navigation.navigate('RegisterScreen')}>
-              <Text
-                style={styles.buttonTextStyle}
-                onPress={() => navigation.navigate('RegisterScreen')}>
-                Register
-              </Text>
-            </TouchableOpacity>
+              {({pressed}) => (
+                <Text
+                  style={
+                    pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                  }>
+                  Register
+                </Text>
+              )}
+            </Pressable>
           </Section>
         </ScrollView>
       </KeyboardAvoidingView>

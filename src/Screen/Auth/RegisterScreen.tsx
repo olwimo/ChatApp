@@ -7,10 +7,9 @@ import {
   useColorScheme,
   View,
   TextInput as BasicTextInput,
+  Pressable,
 } from 'react-native';
 import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
-
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {RootStackParamList} from '../../App';
 import Loader from '../../Component/Loader';
@@ -49,7 +48,9 @@ const RegisterScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   const fields = ['email', 'password'] as const;
@@ -104,7 +105,9 @@ const RegisterScreen = ({
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+            backgroundColor: isDarkMode
+              ? MD3DarkTheme.colors.background
+              : MD3LightTheme.colors.background,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
@@ -118,7 +121,7 @@ const RegisterScreen = ({
             />
           </View>
           <Section title="Register">
-          <TextInput
+            <TextInput
               ref={fieldData['email']?.ref}
               onChangeText={fieldData['email']?.set}
               onSubmitEditing={nextActiveField}
@@ -147,14 +150,16 @@ const RegisterScreen = ({
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitButton}>
-              <Text onPress={handleSubmitButton} style={styles.buttonTextStyle}>
-                REGISTER
-              </Text>
-            </TouchableOpacity>
+            <Pressable style={styles.buttonStyle} onPress={handleSubmitButton}>
+              {({pressed}) => (
+                <Text
+                  style={
+                    pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                  }>
+                  REGISTER
+                </Text>
+              )}
+            </Pressable>
           </Section>
         </ScrollView>
       </KeyboardAvoidingView>

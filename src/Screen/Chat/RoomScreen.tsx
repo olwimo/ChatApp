@@ -4,7 +4,7 @@ import {MD3DarkTheme, MD3LightTheme, Text, TextInput} from 'react-native-paper';
 import {
   Image,
   KeyboardAvoidingView,
-  TouchableOpacity,
+  Pressable,
   useColorScheme,
   View,
 } from 'react-native';
@@ -126,7 +126,9 @@ const RoomScreen = ({}: NativeStackScreenProps<
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
+    backgroundColor: isDarkMode
+      ? MD3DarkTheme.colors.background
+      : MD3LightTheme.colors.background,
   };
 
   useEffect(() => {
@@ -217,7 +219,7 @@ const RoomScreen = ({}: NativeStackScreenProps<
         .collection('chat')
         .doc(user.roomId)
         .collection('messages')
-        .orderBy('posted', 'asc')
+        .orderBy('posted', 'desc')
         .limit(50)
         .onSnapshot(colSnapshot => {
           setMessages(_ => ({}));
@@ -277,70 +279,87 @@ const RoomScreen = ({}: NativeStackScreenProps<
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <KeyboardAvoidingView enabled>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          contentContainerStyle={{
-            ...backgroundStyle,
-            backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
-          }}>
-          <Picker
-            selectedValue={user.roomId}
-            onValueChange={(value, _index) => dispatch(setRoomId(value))}>
-            {rooms.map(room => (
-              <Picker.Item key={room} label={room} value={room} />
-            ))}
-          </Picker>
-          {Object.keys(messages).map(key => {
-            const content = currentTexts[key];
+      <KeyboardAvoidingView
+      style={{...styles.sectionContainer, ...styles.sectionCenter}}
+       >
+            <View
+              style={{flex: 1}}>
+            <Picker
+            style={{flex: 1}}
+              selectedValue={user.roomId}
+              onValueChange={(value, _index) => dispatch(setRoomId(value))}>
+              {rooms.map(room => (
+                <Picker.Item key={room} label={room} value={room} />
+              ))}
+            </Picker>
+          </View>
+          <ScrollView
+            contentContainerStyle={{
+              ...backgroundStyle,
+              backgroundColor: isDarkMode
+                ? MD3DarkTheme.colors.background
+                : MD3LightTheme.colors.background,
+                flex: 10
+            }}>
+            {Object.keys(messages).map(key => {
+              const content = currentTexts[key];
 
-            return messages[key].kind === 'bucket/image' ? (
-              <Section key={key} title={messages[key].posted}>
-                <Image
-                  source={
-                    currentUsers[messages[key].author]?.avatar ||
-                    require('../../image/drawerWhite.png')
-                  }
-                  style={{
-                    width: 30,
-                    height: 30,
-                    margin: 5,
-                  }}
-                />
-                <Text>
-                  {currentUsers[messages[key].author]?.name || '<Loading name>'}
-                  :
-                </Text>
-                <Image
-                  source={content}
-                  style={{
-                    width: 300,
-                    height: 300,
-                    margin: 5,
-                  }}
-                />
-              </Section>
-            ) : (
-              <Section key={key} title={messages[key].posted}>
-                <Image
-                  source={
-                    currentUsers[messages[key].author]?.avatar ||
-                    require('../../image/drawerWhite.png')
-                  }
-                  style={{
-                    width: 30,
-                    height: 30,
-                    margin: 5,
-                  }}
-                />
-                <Text>
-                  {currentUsers[messages[key].author]?.name || '<Loading name>'}
-                  : {content}
-                </Text>
-              </Section>
-            );
-          })}
-          <Section title="Say:">
+              return messages[key].kind === 'bucket/image' ? (
+                <Section key={key} title={messages[key].posted}>
+                  <Image
+                    source={
+                      currentUsers[messages[key].author]?.avatar ||
+                      require('../../image/drawerWhite.png')
+                    }
+                    style={{
+                      width: 30,
+                      height: 30,
+                      margin: 5,
+                    }}
+                  />
+                  <Text>
+                    {currentUsers[messages[key].author]?.name ||
+                      '<Loading name>'}
+                    :
+                  </Text>
+                  <Image
+                    source={content}
+                    style={{
+                      width: 300,
+                      height: 300,
+                      margin: 5,
+                    }}
+                  />
+                </Section>
+              ) : (
+                <Section key={key} title={messages[key].posted}>
+                  <Image
+                    source={
+                      currentUsers[messages[key].author]?.avatar ||
+                      require('../../image/drawerWhite.png')
+                    }
+                    style={{
+                      width: 30,
+                      height: 30,
+                      margin: 5,
+                    }}
+                  />
+                  <Text>
+                    {currentUsers[messages[key].author]?.name ||
+                      '<Loading name>'}
+                    : {content}
+                  </Text>
+                </Section>
+              );
+            })}
+          </ScrollView>
+          <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+              }}>
             <TextInput
               autoFocus={true}
               onChangeText={text => setText(text)}
@@ -354,45 +373,40 @@ const RoomScreen = ({}: NativeStackScreenProps<
               returnKeyType="default"
               value={text}
             />
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-              }}>
-              {errorText ? <Text>{errorText}</Text> : undefined}
-              <TouchableOpacity
+              <Pressable style={styles.buttonStyle} onPress={handleSendButton}>
+                {({pressed}) => (
+                  <Text
+                    style={
+                      pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                    }>
+                    Send
+                  </Text>
+                )}
+              </Pressable>
+              <Pressable
                 style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={handleSendButton}>
-                <Text onPress={handleSendButton} style={styles.buttonTextStyle}>
-                  Send
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
                 onPress={() => setCount(count + 1)}>
-                <Text
-                  onPress={() => setCount(count + 1)}
-                  style={styles.buttonTextStyle}>
-                  Update
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={handleImageButton}>
-                <Text
-                  onPress={handleImageButton}
-                  style={styles.buttonTextStyle}>
-                  Send Image
-                </Text>
-              </TouchableOpacity>
+                {({pressed}) => (
+                  <Text
+                    style={
+                      pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                    }>
+                    Update
+                  </Text>
+                )}
+              </Pressable>
+              <Pressable style={styles.buttonStyle} onPress={handleImageButton}>
+                {({pressed}) => (
+                  <Text
+                    style={
+                      pressed ? styles.buttonTextStyle : styles.buttonTextStyle
+                    }>
+                    Send Image
+                  </Text>
+                )}
+              </Pressable>
+              <Text>{errorText}</Text>
             </View>
-          </Section>
-        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
